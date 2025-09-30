@@ -1,0 +1,12 @@
+{
+  "name": "web3-quest-hub-scripts",
+  "version": "1.0.0",
+  "description": "Scripts for Web3 Quest Hub deployment and data management",
+  "private": true,
+  "scripts": {
+    "populate-firestore": "node populate-firestore.js"
+  },
+  "dependencies": {
+    "firebase-admin": "^12.0.0"
+  }
+}

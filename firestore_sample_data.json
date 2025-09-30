@@ -1,0 +1,1508 @@
+// ============================================================
+// COLLECTION: user_profile
+// Stores user account data, progression, and wallet info
+// ============================================================
+
+{
+  "user_profile": [
+    {
+      "userId": "user_001_alice",
+      "displayName": "CryptoAlice",
+      "walletAddress": "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb1",
+      "email": "alice@example.com",
+      "totalXP": 2450,
+      "explorerLevel": 4,
+      "explorerTitle": "Wanderer",
+      "badgesEarned": [
+        "portal_key_holder",
+        "hud_ready",
+        "refueler",
+        "bridge_operator",
+        "digital_gold_prospector",
+        "outpost_trader"
+      ],
+      "completedMissions": [
+        "mission_001",
+        "mission_002",
+        "mission_003",
+        "mission_005",
+        "mission_006",
+        "mission_007"
+      ],
+      "activeExpeditions": ["expedition_1", "expedition_2"],
+      "currentMissionId": "mission_008",
+      "profileCreatedAt": "2025-09-15T10:30:00Z",
+      "lastActiveAt": "2025-09-30T14:22:00Z",
+      "customProfileTag": null,
+      "selectedTheme": "dark",
+      "hudSyncEnabled": true
+    },
+    {
+      "userId": "user_002_bob",
+      "displayName": "BlockchainBob",
+      "walletAddress": "0x8Ba1f109551bD432803012645Ac136ddd64DBA72",
+      "email": "bob@example.com",
+      "totalXP": 650,
+      "explorerLevel": 2,
+      "explorerTitle": "Cadet",
+      "badgesEarned": [
+        "portal_key_holder",
+        "hud_ready",
+        "refueler"
+      ],
+      "completedMissions": [
+        "mission_001",
+        "mission_002",
+        "mission_003"
+      ],
+      "activeExpeditions": ["expedition_1"],
+      "currentMissionId": "mission_004",
+      "profileCreatedAt": "2025-09-28T08:15:00Z",
+      "lastActiveAt": "2025-09-30T12:10:00Z",
+      "customProfileTag": null,
+      "selectedTheme": "dark",
+      "hudSyncEnabled": true
+    },
+    {
+      "userId": "user_003_charlie",
+      "displayName": "CryptoCurious",
+      "walletAddress": "0x1234567890123456789012345678901234567890",
+      "email": "charlie@example.com",
+      "totalXP": 100,
+      "explorerLevel": 1,
+      "explorerTitle": "Newbie",
+      "badgesEarned": [
+        "portal_key_holder"
+      ],
+      "completedMissions": [
+        "mission_001"
+      ],
+      "activeExpeditions": ["expedition_1"],
+      "currentMissionId": "mission_002",
+      "profileCreatedAt": "2025-09-30T09:00:00Z",
+      "lastActiveAt": "2025-09-30T15:45:00Z",
+      "customProfileTag": null,
+      "selectedTheme": "dark",
+      "hudSyncEnabled": false
+    }
+  ]
+}
+
+// ============================================================
+// COLLECTION: mission_catalog
+// Blueprint for all missions with verification logic
+// ============================================================
+
+{
+  "mission_catalog": [
+    {
+      "missionId": "mission_001",
+      "expeditionId": "expedition_1",
+      "title": "Portal Activation",
+      "description": "Create Your First Wallet. Secure your private 'Portal Key' (Seed Phrase) and submit your public address for verification.",
+      "loreText": "Every explorer needs a portal to access the Digital Frontier. Your wallet is that gateway—a secure vault that only you control. Guard your seed phrase like the key to a treasure chest, because that's exactly what it is.",
+      "difficulty": "beginner",
+      "estimatedTime": "10 minutes",
+      "xpReward": 100,
+      "badgeId": "portal_key_holder",
+      "badgeName": "Portal Key Holder",
+      "badgeImageUrl": "/badges/portal_key_holder.svg",
+      "prerequisites": [],
+      "requiredLevel": 1,
+      "steps": [
+        {
+          "stepNumber": 1,
+          "instruction": "Visit metamask.io or your preferred wallet provider",
+          "externalLink": "https://metamask.io",
+          "isWhitelisted": true
+        },
+        {
+          "stepNumber": 2,
+          "instruction": "Download and install the browser extension or mobile app",
+          "externalLink": null,
+          "isWhitelisted": false
+        },
+        {
+          "stepNumber": 3,
+          "instruction": "Create a new wallet and securely save your 12-word seed phrase offline",
+          "externalLink": null,
+          "isWhitelisted": false
+        },
+        {
+          "stepNumber": 4,
+          "instruction": "Copy your public wallet address and return here to submit it",
+          "externalLink": null,
+          "isWhitelisted": false
+        }
+      ],
+      "verificationData": {
+        "verificationType": "address_validation",
+        "targetChainId": null,
+        "validationRules": {
+          "mustBeValidEthAddress": true,
+          "mustBeChecksummed": false
+        }
+      },
+      "securityNotes": [
+        "NEVER share your seed phrase with anyone",
+        "Store your seed phrase offline in a secure location",
+        "Quest Hub will NEVER ask for your seed phrase"
+      ],
+      "isActive": true,
+      "createdAt": "2025-09-01T00:00:00Z"
+    },
+    {
+      "missionId": "mission_002",
+      "expeditionId": "expedition_1",
+      "title": "The MetaMask Module",
+      "description": "Install and configure the MetaMask interface. It's your Heads-Up Display for interacting with the world.",
+      "loreText": "Think of MetaMask as your visor—a HUD that lets you see and interact with the invisible blockchain layer that exists behind every Web3 application. Once activated, the metaverse becomes visible.",
+      "difficulty": "beginner",
+      "estimatedTime": "15 minutes",
+      "xpReward": 150,
+      "badgeId": "hud_ready",
+      "badgeName": "HUD Ready",
+      "badgeImageUrl": "/badges/hud_ready.svg",
+      "prerequisites": ["mission_001"],
+      "requiredLevel": 1,
+      "steps": [
+        {
+          "stepNumber": 1,
+          "instruction": "Open your MetaMask extension and explore the interface",
+          "externalLink": null,
+          "isWhitelisted": false
+        },
+        {
+          "stepNumber": 2,
+          "instruction": "Identify the three main sections: Assets, Activity, and Settings",
+          "externalLink": null,
+          "isWhitelisted": false
+        },
+        {
+          "stepNumber": 3,
+          "instruction": "Take the interface knowledge quiz to verify your understanding",
+          "externalLink": null,
+          "isWhitelisted": false
+        }
+      ],
+      "verificationData": {
+        "verificationType": "quiz_completion",
+        "quizId": "metamask_interface_quiz",
+        "passingScore": 2,
+        "totalQuestions": 3
+      },
+      "securityNotes": [
+        "Always check the URL in your browser when connecting your wallet",
+        "MetaMask will show you the site requesting connection"
+      ],
+      "isActive": true,
+      "createdAt": "2025-09-01T00:00:00Z"
+    },
+    {
+      "missionId": "mission_003",
+      "expeditionId": "expedition_1",
+      "title": "Procuring Test Fuel",
+      "description": "Visit the Testnet Refueling Station (Faucet) and procure some no-value Test-ETH. This is free fuel for practice drives.",
+      "loreText": "Before venturing into real transactions, every explorer must practice in the simulation zones. Testnets are perfect replicas of the mainnet, but the currency has no real value. It's your training ground.",
+      "difficulty": "beginner",
+      "estimatedTime": "5 minutes",
+      "xpReward": 50,
+      "badgeId": "refueler",
+      "badgeName": "Refueler",
+      "badgeImageUrl": "/badges/refueler.svg",
+      "prerequisites": ["mission_001"],
+      "requiredLevel": 1,
+      "steps": [
+        {
+          "stepNumber": 1,
+          "instruction": "Add Base Sepolia testnet to your MetaMask (Chain ID: 84532)",
+          "externalLink": "https://chainlist.org/chain/84532",
+          "isWhitelisted": true
+        },
+        {
+          "stepNumber": 2,
+          "instruction": "Visit the Base Sepolia faucet",
+          "externalLink": "https://www.alchemy.com/faucets/base-sepolia",
+          "isWhitelisted": true
+        },
+        {
+          "stepNumber": 3,
+          "instruction": "Request test ETH and wait for confirmation",
+          "externalLink": null,
+          "isWhitelisted": false
+        }
+      ],
+      "verificationData": {
+        "verificationType": "balance_check",
+        "targetChainId": "84532",
+        "targetCurrency": "ETH",
+        "minAmount": 0.01
+      },
+      "securityNotes": [
+        "Testnet tokens have NO real-world value",
+        "Never send real ETH to testnet addresses"
+      ],
+      "isActive": true,
+      "createdAt": "2025-09-01T00:00:00Z"
+    },
+    {
+      "missionId": "mission_004",
+      "expeditionId": "expedition_1",
+      "title": "Your Digital Tag (ENS)",
+      "description": "Claim your permanent, human-readable Digital Tag (ENS name) for your wallet address.",
+      "loreText": "In the metaverse, your wallet address is like a serial number. An ENS name is your chosen identity—readable, memorable, and uniquely yours. It's how others will recognize you.",
+      "difficulty": "intermediate",
+      "estimatedTime": "20 minutes",
+      "xpReward": 400,
+      "badgeId": "frontier_citizen",
+      "badgeName": "Frontier Citizen",
+      "badgeImageUrl": "/badges/frontier_citizen.svg",
+      "prerequisites": ["mission_001", "mission_006"],
+      "requiredLevel": 1,
+      "steps": [
+        {
+          "stepNumber": 1,
+          "instruction": "Visit the ENS app on Ethereum mainnet",
+          "externalLink": "https://app.ens.domains",
+          "isWhitelisted": true
+        },
+        {
+          "stepNumber": 2,
+          "instruction": "Search for your desired .eth name and check availability",
+          "externalLink": null,
+          "isWhitelisted": false
+        },
+        {
+          "stepNumber": 3,
+          "instruction": "Register your name (requires ETH for gas and registration fee)",
+          "externalLink": null,
+          "isWhitelisted": false
+        }
+      ],
+      "verificationData": {
+        "verificationType": "ens_ownership_check",
+        "targetChainId": "1",
+        "checkType": "reverse_lookup"
+      },
+      "securityNotes": [
+        "ENS names cost gas fees plus annual registration fees",
+        "You can sell or transfer your ENS name later"
+      ],
+      "isActive": true,
+      "createdAt": "2025-09-01T00:00:00Z"
+    },
+    {
+      "missionId": "mission_005",
+      "expeditionId": "expedition_2",
+      "title": "The Fiat Bridge",
+      "description": "Connect a Fiat On-Ramp (like Coinbase/MoonPay) to your Hub Profile. This is the Gateway to Digital Gold.",
+      "loreText": "The bridge between old-world currency and digital assets is your first step into real commerce. On-ramps convert your dollars, euros, or local currency into crypto, ready for the Trading Outpost.",
+      "difficulty": "beginner",
+      "estimatedTime": "15 minutes",
+      "xpReward": 150,
+      "badgeId": "bridge_operator",
+      "badgeName": "Bridge Operator",
+      "badgeImageUrl": "/badges/bridge_operator.svg",
+      "prerequisites": ["mission_001"],
+      "requiredLevel": 1,
+      "steps": [
+        {
+          "stepNumber": 1,
+          "instruction": "Choose a trusted on-ramp service (Coinbase, MoonPay, or similar)",
+          "externalLink": null,
+          "isWhitelisted": false
+        },
+        {
+          "stepNumber": 2,
+          "instruction": "Complete KYC verification if required",
+          "externalLink": null,
+          "isWhitelisted": false
+        },
+        {
+          "stepNumber": 3,
+          "instruction": "Link your payment method and confirm connection",
+          "externalLink": null,
+          "isWhitelisted": false
+        },
+        {
+          "stepNumber": 4,
+          "instruction": "Complete the on-ramp safety quiz",
+          "externalLink": null,
+          "isWhitelisted": false
+        }
+      ],
+      "verificationData": {
+        "verificationType": "quiz_completion",
+        "quizId": "onramp_safety_quiz",
+        "passingScore": 3,
+        "totalQuestions": 4
+      },
+      "securityNotes": [
+        "Only use trusted, verified on-ramp services",
+        "Never share your banking credentials with unofficial sites",
+        "Start with small amounts to test the process"
+      ],
+      "isActive": true,
+      "createdAt": "2025-09-01T00:00:00Z"
+    },
+    {
+      "missionId": "mission_006",
+      "expeditionId": "expedition_2",
+      "title": "First Gold Acquisition",
+      "description": "Purchase a small amount of Mainnet ETH (e.g., $10). You now have currency for the Outpost!",
+      "loreText": "Your first piece of digital gold. ETH is the fuel that powers Ethereum—the engine of the metaverse. With it in your wallet, you're ready to transact, trade, and explore.",
+      "difficulty": "beginner",
+      "estimatedTime": "10 minutes",
+      "xpReward": 200,
+      "badgeId": "digital_gold_prospector",
+      "badgeName": "Digital Gold Prospector",
+      "badgeImageUrl": "/badges/digital_gold_prospector.svg",
+      "prerequisites": ["mission_005"],
+      "requiredLevel": 1,
+      "steps": [
+        {
+          "stepNumber": 1,
+          "instruction": "Use your connected on-ramp to purchase a small amount of ETH (minimum $10 recommended)",
+          "externalLink": null,
+          "isWhitelisted": false
+        },
+        {
+          "stepNumber": 2,
+          "instruction": "Ensure the ETH is sent to your MetaMask wallet address",
+          "externalLink": null,
+          "isWhitelisted": false
+        },
+        {
+          "stepNumber": 3,
+          "instruction": "Wait for the transaction to confirm and appear in your wallet",
+          "externalLink": null,
+          "isWhitelisted": false
+        }
+      ],
+      "verificationData": {
+        "verificationType": "balance_check",
+        "targetChainId": "1",
+        "targetCurrency": "ETH",
+        "minAmount": 0.005
+      },
+      "securityNotes": [
+        "Start with small amounts until you're comfortable",
+        "Double-check your wallet address before purchasing",
+        "Keep records of your transactions for tax purposes"
+      ],
+      "isActive": true,
+      "createdAt": "2025-09-01T00:00:00Z"
+    },
+    {
+      "missionId": "mission_007",
+      "expeditionId": "expedition_2",
+      "title": "The Simple Swap",
+      "description": "Use the Uniswap Exchange Terminal to trade your ETH for a stable currency like USDC. Learn to swap one asset for another.",
+      "loreText": "The Exchange Terminal is where assets flow freely. Uniswap is a decentralized exchange—no middleman, no accounts, just pure peer-to-peer trading powered by smart contracts.",
+      "difficulty": "intermediate",
+      "estimatedTime": "15 minutes",
+      "xpReward": 250,
+      "badgeId": "outpost_trader",
+      "badgeName": "Outpost Trader",
+      "badgeImageUrl": "/badges/outpost_trader.svg",
+      "prerequisites": ["mission_006"],
+      "requiredLevel": 4,
+      "steps": [
+        {
+          "stepNumber": 1,
+          "instruction": "Navigate to the Uniswap interface",
+          "externalLink": "https://app.uniswap.org",
+          "isWhitelisted": true
+        },
+        {
+          "stepNumber": 2,
+          "instruction": "Connect your MetaMask wallet",
+          "externalLink": null,
+          "isWhitelisted": false
+        },
+        {
+          "stepNumber": 3,
+          "instruction": "Select ETH to swap and choose USDC as the output token",
+          "externalLink": null,
+          "isWhitelisted": false
+        },
+        {
+          "stepNumber": 4,
+          "instruction": "Review the swap details (rate, gas fee, slippage)",
+          "externalLink": null,
+          "isWhitelisted": false
+        },
+        {
+          "stepNumber": 5,
+          "instruction": "Confirm the swap and approve the transaction in MetaMask",
+          "externalLink": null,
+          "isWhitelisted": false
+        }
+      ],
+      "verificationData": {
+        "verificationType": "event_check",
+        "targetChainId": "1",
+        "contractAddress": "0x68b3465833fb72A70ecDF485E0e4C7bD8665Fc45",
+        "eventSignature": "Swap",
+        "minAmountIn": 0.001,
+        "checkWindow": 7
+      },
+      "securityNotes": [
+        "Always check the token contract address before swapping",
+        "Start with small amounts to test the process",
+        "Be aware of gas fees—they can be high on Ethereum mainnet",
+        "Slippage is normal; set it to 0.5-1% for stable pairs"
+      ],
+      "isActive": true,
+      "createdAt": "2025-09-01T00:00:00Z"
+    },
+    {
+      "missionId": "mission_008",
+      "expeditionId": "expedition_2",
+      "title": "Gas Fee Awareness",
+      "description": "Perform a small swap on a Layer 2 Network (e.g., Optimism or Base) to experience the speed of the Hyperloop and low fees.",
+      "loreText": "Ethereum mainnet can be expensive. Layer 2 networks are the express lanes—built on top of Ethereum but offering near-instant transactions at a fraction of the cost.",
+      "difficulty": "intermediate",
+      "estimatedTime": "20 minutes",
+      "xpReward": 300,
+      "badgeId": "hyperloop_commuter",
+      "badgeName": "Hyperloop Commuter",
+      "badgeImageUrl": "/badges/hyperloop_commuter.svg",
+      "prerequisites": ["mission_007"],
+      "requiredLevel": 4,
+      "steps": [
+        {
+          "stepNumber": 1,
+          "instruction": "Add Base network to MetaMask (Chain ID: 8453)",
+          "externalLink": "https://chainlist.org/chain/8453",
+          "isWhitelisted": true
+        },
+        {
+          "stepNumber": 2,
+          "instruction": "Bridge some ETH from mainnet to Base using the official bridge",
+          "externalLink": "https://bridge.base.org",
+          "isWhitelisted": true
+        },
+        {
+          "stepNumber": 3,
+          "instruction": "Visit Uniswap and switch to Base network",
+          "externalLink": "https://app.uniswap.org",
+          "isWhitelisted": true
+        },
+        {
+          "stepNumber": 4,
+          "instruction": "Perform a small swap and notice the low gas fees",
+          "externalLink": null,
+          "isWhitelisted": false
+        }
+      ],
+      "verificationData": {
+        "verificationType": "tx_history_check",
+        "targetChainId": "8453",
+        "checkWindow": 14,
+        "minTransactions": 1
+      },
+      "securityNotes": [
+        "Only use official bridges (bridge.base.org, etc.)",
+        "L2 transactions are much cheaper but bridging has costs",
+        "Always keep some ETH on mainnet for emergencies"
+      ],
+      "isActive": true,
+      "createdAt": "2025-09-01T00:00:00Z"
+    },
+    {
+      "missionId": "mission_009",
+      "expeditionId": "expedition_3",
+      "title": "The Gallery Crawl",
+      "description": "Navigate the OpenSea Artifact Market. Browse three different collections—it's like visiting three art exhibits. (No purchase required!)",
+      "loreText": "The Artifact Quarter is where digital culture lives. NFTs aren't just images—they're proof of ownership, community membership, and creative expression. Start by exploring.",
+      "difficulty": "beginner",
+      "estimatedTime": "15 minutes",
+      "xpReward": 100,
+      "badgeId": "artifact_tourist",
+      "badgeName": "Artifact Tourist",
+      "badgeImageUrl": "/badges/artifact_tourist.svg",
+      "prerequisites": ["mission_001"],
+      "requiredLevel": 6,
+      "steps": [
+        {
+          "stepNumber": 1,
+          "instruction": "Visit OpenSea marketplace",
+          "externalLink": "https://opensea.io",
+          "isWhitelisted": true
+        },
+        {
+          "stepNumber": 2,
+          "instruction": "Browse and explore three different NFT collections",
+          "externalLink": null,
+          "isWhitelisted": false
+        },
+        {
+          "stepNumber": 3,
+          "instruction": "Complete the NFT utility knowledge check",
+          "externalLink": null,
+          "isWhitelisted": false
+        }
+      ],
+      "verificationData": {
+        "verificationType": "quiz_completion",
+        "quizId": "nft_utility_quiz",
+        "passingScore": 2,
+        "totalQuestions": 3
+      },
+      "securityNotes": [
+        "Never connect your wallet just to browse",
+        "Be cautious of too-good-to-be-true deals",
+        "Research projects before purchasing"
+      ],
+      "isActive": true,
+      "createdAt": "2025-09-01T00:00:00Z"
+    },
+    {
+      "missionId": "mission_010",
+      "expeditionId": "expedition_3",
+      "title": "Minting a Free Pass",
+      "description": "Mint a free NFT ('Community Pass') on a platform like Zora or a similar curated free-mint platform.",
+      "loreText": "Your first artifact. Minting is the act of creation—bringing a new digital asset into existence and claiming it as yours. Many communities offer free mints as welcome gifts.",
+      "difficulty": "intermediate",
+      "estimatedTime": "10 minutes",
+      "xpReward": 300,
+      "badgeId": "digital_collector",
+      "badgeName": "Digital Collector",
+      "badgeImageUrl": "/badges/digital_collector.svg",
+      "prerequisites": ["mission_009"],
+      "requiredLevel": 6,
+      "steps": [
+        {
+          "stepNumber": 1,
+          "instruction": "Visit Zora or another free mint platform",
+          "externalLink": "https://zora.co",
+          "isWhitelisted": true
+        },
+        {
+          "stepNumber": 2,
+          "instruction": "Find a free or low-cost NFT to mint",
+          "externalLink": null,
+          "isWhitelisted": false
+        },
+        {
+          "stepNumber": 3,
+          "instruction": "Connect your wallet and mint the NFT",
+          "externalLink": null,
+          "isWhitelisted": false
+        }
+      ],
+      "verificationData": {
+        "verificationType": "nft_ownership_check",
+        "targetChainId": "1",
+        "checkType": "any_nft",
+        "minCount": 1
+      },
+      "securityNotes": [
+        "Free mints still require gas fees",
+        "Verify the contract address before minting",
+        "Be aware of mint limits and time windows"
+      ],
+      "isActive": true,
+      "createdAt": "2025-09-01T00:00:00Z"
+    }
+  ]
+}
+
+// ============================================================
+// COLLECTION: mission_status
+// Tracks individual user progress on each mission
+// ============================================================
+
+{
+  "mission_status": [
+    {
+      "statusId": "status_001_001",
+      "userId": "user_001_alice",
+      "missionId": "mission_001",
+      "status": "completed",
+      "startedAt": "2025-09-15T10:45:00Z",
+      "completedAt": "2025-09-15T11:00:00Z",
+      "currentStep": 4,
+      "verificationAttempts": 1,
+      "lastVerificationAttempt": "2025-09-15T11:00:00Z"
+    },
+    {
+      "statusId": "status_001_002",
+      "userId": "user_001_alice",
+      "missionId": "mission_002",
+      "status": "completed",
+      "startedAt": "2025-09-15T11:05:00Z",
+      "completedAt": "2025-09-15T11:25:00Z",
+      "currentStep": 3,
+      "verificationAttempts": 1,
+      "lastVerificationAttempt": "2025-09-15T11:25:00Z"
+    },
+    {
+      "statusId": "status_001_008",
+      "userId": "user_001_alice",
+      "missionId": "mission_008",
+      "status": "in_progress",
+      "startedAt": "2025-09-30T14:00:00Z",
+      "completedAt": null,
+      "currentStep": 2,
+      "verificationAttempts": 0,
+      "lastVerificationAttempt": null
+    },
+    {
+      "statusId": "status_002_001",
+      "userId": "user_002_bob",
+      "missionId": "mission_001",
+      "status": "completed",
+      "startedAt": "2025-09-28T08:30:00Z",
+      "completedAt": "2025-09-28T08:45:00Z",
+      "currentStep": 4,
+      "verificationAttempts": 1,
+      "lastVerificationAttempt": "2025-09-28T08:45:00Z"
+    },
+    {
+      "statusId": "status_002_004",
+      "userId": "user_002_bob",
+      "missionId": "mission_004",
+      "status": "in_progress",
+      "startedAt": "2025-09-30T12:00:00Z",
+      "completedAt": null,
+      "currentStep": 1,
+      "verificationAttempts": 0,
+      "lastVerificationAttempt": null
+    },
+    {
+      "statusId": "status_003_001",
+      "userId": "user_003_charlie",
+      "missionId": "mission_001",
+      "status": "completed",
+      "startedAt": "2025-09-30T09:15:00Z",
+      "completedAt": "2025-09-30T09:30:00Z",
+      "currentStep": 4,
+      "verificationAttempts": 2,
+      "lastVerificationAttempt": "2025-09-30T09:30:00Z"
+    },
+    {
+      "statusId": "status_003_002",
+      "userId": "user_003_charlie",
+      "missionId": "mission_002",
+      "status": "in_progress",
+      "startedAt": "2025-09-30T15:00:00Z",
+      "completedAt": null,
+      "currentStep": 2,
+      "verificationAttempts": 0,
+      "lastVerificationAttempt": null
+    }
+  ]
+}
+
+// ============================================================
+// COLLECTION: expedition_catalog
+// Defines the three main learning expeditions
+// ============================================================
+
+{
+  "expedition_catalog": [
+    {
+      "expeditionId": "expedition_1",
+      "title": "The Digital Frontier",
+      "description": "Master the fundamentals of Web3: wallet creation, security best practices, and establishing your digital identity.",
+      "theme": "Onboarding, Wallet Security, and Identity",
+      "iconUrl": "/expeditions/digital_frontier.svg",
+      "requiredLevel": 1,
+      "totalMissions": 4,
+      "estimatedCompletionTime": "1-2 hours",
+      "isActive": true,
+      "sortOrder": 1
+    },
+    {
+      "expeditionId": "expedition_2",
+      "title": "The Trading Outpost",
+      "description": "Learn to acquire, swap, and manage digital assets across multiple blockchain networks.",
+      "theme": "DeFi, Commerce, and Low-Fee Networks",
+      "iconUrl": "/expeditions/trading_outpost.svg",
+      "requiredLevel": 4,
+      "totalMissions": 4,
+      "estimatedCompletionTime": "2-3 hours",
+      "isActive": true,
+      "sortOrder": 2
+    },
+    {
+      "expeditionId": "expedition_3",
+      "title": "The Artifact Quarter",
+      "description": "Explore NFTs, decentralized social platforms, and community governance structures.",
+      "theme": "NFTs, Culture, and Social DAOs",
+      "iconUrl": "/expeditions/artifact_quarter.svg",
+      "requiredLevel": 6,
+      "totalMissions": 4,
+      "estimatedCompletionTime": "2-3 hours",
+      "isActive": true,
+      "sortOrder": 3
+    }
+  ]
+}
+
+// ============================================================
+// COLLECTION: badge_catalog
+// Defines all available achievement badges
+// ============================================================
+
+{
+  "badge_catalog": [
+    {
+      "badgeId": "portal_key_holder",
+      "badgeName": "Portal Key Holder",
+      "description": "Created your first Web3 wallet and secured your seed phrase",
+      "imageUrl": "/badges/portal_key_holder.svg",
+      "rarity": "common",
+      "category": "foundation",
+      "expeditionId": "expedition_1"
+    },
+    {
+      "badgeId": "hud_ready",
+      "badgeName": "HUD Ready",
+      "description": "Mastered the MetaMask interface and passed the knowledge check",
+      "imageUrl": "/badges/hud_ready.svg",
+      "rarity": "common",
+      "category": "foundation",
+      "expeditionId": "expedition_1"
+    },
+    {
+      "badgeId": "refueler",
+      "badgeName": "Refueler",
+      "description": "Acquired testnet ETH and learned about practice networks",
+      "imageUrl": "/badges/refueler.svg",
+      "rarity": "common",
+      "category": "foundation",
+      "expeditionId": "expedition_1"
+    },
+    {
+      "badgeId": "frontier_citizen",
+      "badgeName": "Frontier Citizen",
+      "description": "Claimed your ENS name and established your Web3 identity",
+      "imageUrl": "/badges/frontier_citizen.svg",
+      "rarity": "rare",
+      "category": "identity",
+      "expeditionId": "expedition_1"
+    },
+    {
+      "badgeId": "bridge_operator",
+      "badgeName": "Bridge Operator",
+      "description": "Connected a fiat on-ramp and learned safe purchasing practices",
+      "imageUrl": "/badges/bridge_operator.svg",
+      "rarity": "common",
+      "category": "finance",
+      "expeditionId": "expedition_2"
+    },
+    {
+      "badgeId": "digital_gold_prospector",
+      "badgeName": "Digital Gold Prospector",
+      "description": "Made your first real crypto purchase on mainnet",
+      "imageUrl": "/badges/digital_gold_prospector.svg",
+      "rarity": "uncommon",
+      "category": "finance",
+      "expeditionId": "expedition_2"
+    },
+    {
+      "badgeId": "outpost_trader",
+      "badgeName": "Outpost Trader",
+      "description": "Completed your first decentralized exchange swap on Uniswap",
+      "imageUrl": "/badges/outpost_trader.svg",
+      "rarity": "uncommon",
+      "category": "defi",
+      "expeditionId": "expedition_2"
+    },
+    {
+      "badgeId": "hyperloop_commuter",
+      "badgeName": "Hyperloop Commuter",
+      "description": "Experienced Layer 2 networks and ultra-low transaction fees",
+      "imageUrl": "/badges/hyperloop_commuter.svg",
+      "rarity": "rare",
+      "category": "defi",
+      "expeditionId": "expedition_2"
+    },
+    {
+      "badgeId": "artifact_tourist",
+      "badgeName": "Artifact Tourist",
+      "description": "Explored NFT marketplaces and learned about digital ownership",
+      "imageUrl": "/badges/artifact_tourist.svg",
+      "rarity": "common",
+      "category": "culture",
+      "expeditionId": "expedition_3"
+    },
+    {
+      "badgeId": "digital_collector",
+      "badgeName": "Digital Collector",
+      "description": "Minted your first NFT and joined the collector community",
+      "imageUrl": "/badges/digital_collector.svg",
+      "rarity": "uncommon",
+      "category": "culture",
+      "expeditionId": "expedition_3"
+    },
+    {
+      "badgeId": "metaverse_citizen",
+      "badgeName": "Metaverse Citizen",
+      "description": "Established your decentralized social identity",
+      "imageUrl": "/badges/metaverse_citizen.svg",
+      "rarity": "rare",
+      "category": "social",
+      "expeditionId": "expedition_3"
+    },
+    {
+      "badgeId": "council_member",
+      "badgeName": "Council Member",
+      "description": "Joined a DAO and verified your membership on-chain",
+      "imageUrl": "/badges/council_member.svg",
+      "rarity": "rare",
+      "category": "social",
+      "expeditionId": "expedition_3"
+    }
+  ]
+}
+
+// ============================================================
+// COLLECTION: user_activity_log
+// Chronological record of all user actions (The Logbook)
+// ============================================================
+
+{
+  "user_activity_log": [
+    {
+      "activityId": "activity_001_001",
+      "userId": "user_001_alice",
+      "activityType": "profile_created",
+      "timestamp": "2025-09-15T10:30:00Z",
+      "description": "Welcome to the Web3 Quest Hub, Explorer!",
+      "metadata": {
+        "initialLevel": 1,
+        "initialXP": 0
+      }
+    },
+    {
+      "activityId": "activity_001_002",
+      "userId": "user_001_alice",
+      "activityType": "mission_started",
+      "timestamp": "2025-09-15T10:45:00Z",
+      "description": "Started mission: Portal Activation",
+      "metadata": {
+        "missionId": "mission_001",
+        "expeditionId": "expedition_1"
+      }
+    },
+    {
+      "activityId": "activity_001_003",
+      "userId": "user_001_alice",
+      "activityType": "mission_completed",
+      "timestamp": "2025-09-15T11:00:00Z",
+      "description": "Completed mission: Portal Activation",
+      "metadata": {
+        "missionId": "mission_001",
+        "xpEarned": 100,
+        "badgeEarned": "portal_key_holder"
+      }
+    },
+    {
+      "activityId": "activity_001_004",
+      "userId": "user_001_alice",
+      "activityType": "mission_completed",
+      "timestamp": "2025-09-15T11:25:00Z",
+      "description": "Completed mission: The MetaMask Module",
+      "metadata": {
+        "missionId": "mission_002",
+        "xpEarned": 150,
+        "badgeEarned": "hud_ready"
+      }
+    },
+    {
+      "activityId": "activity_001_005",
+      "userId": "user_001_alice",
+      "activityType": "level_up",
+      "timestamp": "2025-09-15T11:25:00Z",
+      "description": "Level Up! You are now a Cadet (Level 2)",
+      "metadata": {
+        "oldLevel": 1,
+        "newLevel": 2,
+        "totalXP": 600,
+        "unlockedFeature": "Logbook history view"
+      }
+    },
+    {
+      "activityId": "activity_001_006",
+      "userId": "user_001_alice",
+      "activityType": "mission_completed",
+      "timestamp": "2025-09-16T14:20:00Z",
+      "description": "Completed mission: First Gold Acquisition",
+      "metadata": {
+        "missionId": "mission_006",
+        "xpEarned": 200,
+        "badgeEarned": "digital_gold_prospector"
+      }
+    },
+    {
+      "activityId": "activity_001_007",
+      "userId": "user_001_alice",
+      "activityType": "level_up",
+      "timestamp": "2025-09-20T16:35:00Z",
+      "description": "Level Up! You are now a Wanderer (Level 4)",
+      "metadata": {
+        "oldLevel": 3,
+        "newLevel": 4,
+        "totalXP": 2300,
+        "unlockedFeature": "Access to Expedition 2: The Trading Outpost"
+      }
+    },
+    {
+      "activityId": "activity_001_008",
+      "userId": "user_001_alice",
+      "activityType": "expedition_unlocked",
+      "timestamp": "2025-09-20T16:35:00Z",
+      "description": "Unlocked Expedition 2: The Trading Outpost",
+      "metadata": {
+        "expeditionId": "expedition_2"
+      }
+    },
+    {
+      "activityId": "activity_001_009",
+      "userId": "user_001_alice",
+      "activityType": "mission_started",
+      "timestamp": "2025-09-30T14:00:00Z",
+      "description": "Started mission: Gas Fee Awareness",
+      "metadata": {
+        "missionId": "mission_008",
+        "expeditionId": "expedition_2"
+      }
+    },
+    {
+      "activityId": "activity_002_001",
+      "userId": "user_002_bob",
+      "activityType": "profile_created",
+      "timestamp": "2025-09-28T08:15:00Z",
+      "description": "Welcome to the Web3 Quest Hub, Explorer!",
+      "metadata": {
+        "initialLevel": 1,
+        "initialXP": 0
+      }
+    },
+    {
+      "activityId": "activity_002_002",
+      "userId": "user_002_bob",
+      "activityType": "mission_completed",
+      "timestamp": "2025-09-28T08:45:00Z",
+      "description": "Completed mission: Portal Activation",
+      "metadata": {
+        "missionId": "mission_001",
+        "xpEarned": 100,
+        "badgeEarned": "portal_key_holder"
+      }
+    },
+    {
+      "activityId": "activity_002_003",
+      "userId": "user_002_bob",
+      "activityType": "level_up",
+      "timestamp": "2025-09-29T10:20:00Z",
+      "description": "Level Up! You are now a Cadet (Level 2)",
+      "metadata": {
+        "oldLevel": 1,
+        "newLevel": 2,
+        "totalXP": 650,
+        "unlockedFeature": "Logbook history view"
+      }
+    },
+    {
+      "activityId": "activity_003_001",
+      "userId": "user_003_charlie",
+      "activityType": "profile_created",
+      "timestamp": "2025-09-30T09:00:00Z",
+      "description": "Welcome to the Web3 Quest Hub, Explorer!",
+      "metadata": {
+        "initialLevel": 1,
+        "initialXP": 0
+      }
+    },
+    {
+      "activityId": "activity_003_002",
+      "userId": "user_003_charlie",
+      "activityType": "mission_completed",
+      "timestamp": "2025-09-30T09:30:00Z",
+      "description": "Completed mission: Portal Activation",
+      "metadata": {
+        "missionId": "mission_001",
+        "xpEarned": 100,
+        "badgeEarned": "portal_key_holder"
+      }
+    }
+  ]
+}
+
+// ============================================================
+// COLLECTION: hud_sync_state
+// Stores active mission state for the browser plugin
+// ============================================================
+
+{
+  "hud_sync_state": [
+    {
+      "syncId": "sync_001",
+      "userId": "user_001_alice",
+      "activeMissionId": "mission_008",
+      "currentStepNumber": 2,
+      "missionTitle": "Gas Fee Awareness",
+      "whitelistedDomains": [
+        "chainlist.org",
+        "bridge.base.org",
+        "app.uniswap.org"
+      ],
+      "lastSyncTimestamp": "2025-09-30T14:22:00Z",
+      "hudEnabled": true,
+      "securityAlertsEnabled": true
+    },
+    {
+      "syncId": "sync_002",
+      "userId": "user_002_bob",
+      "activeMissionId": "mission_004",
+      "currentStepNumber": 1,
+      "missionTitle": "Your Digital Tag (ENS)",
+      "whitelistedDomains": [
+        "app.ens.domains"
+      ],
+      "lastSyncTimestamp": "2025-09-30T12:10:00Z",
+      "hudEnabled": true,
+      "securityAlertsEnabled": true
+    },
+    {
+      "syncId": "sync_003",
+      "userId": "user_003_charlie",
+      "activeMissionId": "mission_002",
+      "currentStepNumber": 2,
+      "missionTitle": "The MetaMask Module",
+      "whitelistedDomains": [],
+      "lastSyncTimestamp": "2025-09-30T15:45:00Z",
+      "hudEnabled": false,
+      "securityAlertsEnabled": true
+    }
+  ]
+}
+
+// ============================================================
+// COLLECTION: level_progression_table
+// Static reference table for XP requirements and unlocks
+// ============================================================
+
+{
+  "level_progression_table": [
+    {
+      "level": 1,
+      "title": "Newbie",
+      "cumulativeXPRequired": 0,
+      "xpToNextLevel": 500,
+      "majorUnlock": "Access to Expedition 1: The Digital Frontier",
+      "unlockedFeatures": ["expedition_1"]
+    },
+    {
+      "level": 2,
+      "title": "Cadet",
+      "cumulativeXPRequired": 500,
+      "xpToNextLevel": 750,
+      "majorUnlock": "Unlocks Logbook history view",
+      "unlockedFeatures": ["logbook_view"]
+    },
+    {
+      "level": 3,
+      "title": "Apprentice",
+      "cumulativeXPRequired": 1250,
+      "xpToNextLevel": 1000,
+      "majorUnlock": "Unlocks AURA Security Health Check",
+      "unlockedFeatures": ["aura_security_check"]
+    },
+    {
+      "level": 4,
+      "title": "Wanderer",
+      "cumulativeXPRequired": 2250,
+      "xpToNextLevel": 1250,
+      "majorUnlock": "Access to Expedition 2: The Trading Outpost",
+      "unlockedFeatures": ["expedition_2"]
+    },
+    {
+      "level": 5,
+      "title": "Trader",
+      "cumulativeXPRequired": 3500,
+      "xpToNextLevel": 1500,
+      "majorUnlock": "Unlocks Leaderboard view",
+      "unlockedFeatures": ["leaderboard"]
+    },
+    {
+      "level": 6,
+      "title": "Collector",
+      "cumulativeXPRequired": 5000,
+      "xpToNextLevel": 1750,
+      "majorUnlock": "Access to Expedition 3: The Artifact Quarter",
+      "unlockedFeatures": ["expedition_3"]
+    },
+    {
+      "level": 7,
+      "title": "Guardian",
+      "cumulativeXPRequired": 6750,
+      "xpToNextLevel": 2000,
+      "majorUnlock": "Unlocks Custom Profile Tag",
+      "unlockedFeatures": ["custom_profile_tag"]
+    },
+    {
+      "level": 8,
+      "title": "Architect",
+      "cumulativeXPRequired": 8750,
+      "xpToNextLevel": 2250,
+      "majorUnlock": "Unlocks Advanced Wallet Analysis Tools",
+      "unlockedFeatures": ["advanced_wallet_tools"]
+    },
+    {
+      "level": 9,
+      "title": "Veteran",
+      "cumulativeXPRequired": 11000,
+      "xpToNextLevel": 2500,
+      "majorUnlock": "Unlocks Dashboard Theme Selector",
+      "unlockedFeatures": ["theme_selector"]
+    },
+    {
+      "level": 10,
+      "title": "Frontier Citizen",
+      "cumulativeXPRequired": 13500,
+      "xpToNextLevel": null,
+      "majorUnlock": "Unlocks High Security Zone (Advanced Quests)",
+      "unlockedFeatures": ["high_security_zone", "advanced_quests"]
+    }
+  ]
+}
+
+// ============================================================
+// COLLECTION: quiz_catalog
+// Stores quiz questions for knowledge verification
+// ============================================================
+
+{
+  "quiz_catalog": [
+    {
+      "quizId": "metamask_interface_quiz",
+      "title": "MetaMask Interface Knowledge Check",
+      "description": "Test your understanding of the MetaMask interface",
+      "passingScore": 2,
+      "questions": [
+        {
+          "questionId": "mmq_001",
+          "questionText": "Where in MetaMask can you view your transaction history?",
+          "options": [
+            "Assets tab",
+            "Activity tab",
+            "Settings menu",
+            "Portfolio view"
+          ],
+          "correctAnswer": 1,
+          "explanation": "The Activity tab shows your complete transaction history including sent, received, and pending transactions."
+        },
+        {
+          "questionId": "mmq_002",
+          "questionText": "What does the network selector dropdown (top of MetaMask) allow you to do?",
+          "options": [
+            "Change your wallet password",
+            "Switch between different blockchain networks",
+            "Select different token types",
+            "Change your display language"
+          ],
+          "correctAnswer": 1,
+          "explanation": "The network dropdown lets you switch between Ethereum mainnet, testnets, and other networks like Polygon or Arbitrum."
+        },
+        {
+          "questionId": "mmq_003",
+          "questionText": "Before approving a transaction, MetaMask shows you important details. Which of these is NOT typically shown?",
+          "options": [
+            "Estimated gas fee",
+            "Your private key",
+            "The recipient address",
+            "Total transaction amount"
+          ],
+          "correctAnswer": 1,
+          "explanation": "MetaMask NEVER shows your private key or seed phrase during normal operations. If a site asks for it, it's a scam!"
+        }
+      ]
+    },
+    {
+      "quizId": "onramp_safety_quiz",
+      "title": "Fiat On-Ramp Safety Check",
+      "description": "Verify your understanding of safe on-ramping practices",
+      "passingScore": 3,
+      "questions": [
+        {
+          "questionId": "orq_001",
+          "questionText": "Which of these is a trusted, legitimate on-ramp service?",
+          "options": [
+            "Coinbase",
+            "FastCryptoNow.biz",
+            "InstaBitcoin.xyz",
+            "CryptoDealsToday.net"
+          ],
+          "correctAnswer": 0,
+          "explanation": "Coinbase is a well-established, regulated platform. Always research on-ramps and use verified services."
+        },
+        {
+          "questionId": "orq_002",
+          "questionText": "What should you NEVER share with an on-ramp service?",
+          "options": [
+            "Your email address",
+            "Your wallet address",
+            "Your seed phrase",
+            "Your payment method"
+          ],
+          "correctAnswer": 2,
+          "explanation": "NEVER share your seed phrase with anyone, including on-ramp services. They only need your public wallet address."
+        },
+        {
+          "questionId": "orq_003",
+          "questionText": "When buying crypto for the first time, what's the recommended approach?",
+          "options": [
+            "Buy the maximum amount allowed",
+            "Start with a small amount to test the process",
+            "Use all available credit",
+            "Wait for the lowest possible price"
+          ],
+          "correctAnswer": 1,
+          "explanation": "Always start small to familiarize yourself with the process before making larger purchases."
+        },
+        {
+          "questionId": "orq_004",
+          "questionText": "Why do on-ramps require KYC (Know Your Customer) verification?",
+          "options": [
+            "To steal your identity",
+            "To comply with financial regulations and prevent fraud",
+            "To sell your data",
+            "To limit your purchases"
+          ],
+          "correctAnswer": 1,
+          "explanation": "Legitimate on-ramps are regulated financial services and must verify identity to comply with anti-money laundering laws."
+        }
+      ]
+    },
+    {
+      "quizId": "nft_utility_quiz",
+      "title": "NFT Utility Knowledge Check",
+      "description": "Test your understanding of NFT functionality and use cases",
+      "passingScore": 2,
+      "questions": [
+        {
+          "questionId": "nftq_001",
+          "questionText": "What does NFT stand for?",
+          "options": [
+            "New Financial Token",
+            "Non-Fungible Token",
+            "Network File Transfer",
+            "Next Future Technology"
+          ],
+          "correctAnswer": 1,
+          "explanation": "NFT stands for Non-Fungible Token, meaning each token is unique and cannot be exchanged 1:1 with another."
+        },
+        {
+          "questionId": "nftq_002",
+          "questionText": "Besides digital art, NFTs can represent:",
+          "options": [
+            "Event tickets",
+            "Community membership",
+            "Digital certificates",
+            "All of the above"
+          ],
+          "correctAnswer": 3,
+          "explanation": "NFTs have many utilities beyond art, including access passes, membership proof, tickets, credentials, and more."
+        },
+        {
+          "questionId": "nftq_003",
+          "questionText": "What is 'minting' an NFT?",
+          "options": [
+            "Selling an NFT for profit",
+            "Creating a new NFT and recording it on the blockchain",
+            "Transferring an NFT to someone else",
+            "Making multiple copies of an NFT"
+          ],
+          "correctAnswer": 1,
+          "explanation": "Minting is the process of creating a new NFT and permanently recording its existence on the blockchain."
+        }
+      ]
+    }
+  ]
+}
+
+// ============================================================
+// COLLECTION: leaderboard
+// Global leaderboard for competitive users (unlocked at Level 5)
+// ============================================================
+
+{
+  "leaderboard": [
+    {
+      "rank": 1,
+      "userId": "user_001_alice",
+      "displayName": "CryptoAlice",
+      "totalXP": 2450,
+      "explorerLevel": 4,
+      "completedMissions": 6,
+      "badgeCount": 6,
+      "lastActivityTimestamp": "2025-09-30T14:22:00Z"
+    },
+    {
+      "rank": 2,
+      "userId": "user_002_bob",
+      "displayName": "BlockchainBob",
+      "totalXP": 650,
+      "explorerLevel": 2,
+      "completedMissions": 3,
+      "badgeCount": 3,
+      "lastActivityTimestamp": "2025-09-30T12:10:00Z"
+    },
+    {
+      "rank": 3,
+      "userId": "user_003_charlie",
+      "displayName": "CryptoCurious",
+      "totalXP": 100,
+      "explorerLevel": 1,
+      "completedMissions": 1,
+      "badgeCount": 1,
+      "lastActivityTimestamp": "2025-09-30T15:45:00Z"
+    }
+  ]
+}
+
+// ============================================================
+// COLLECTION: aura_conversation_history
+// Stores AURA AI assistant conversation context per user
+// ============================================================
+
+{
+  "aura_conversation_history": [
+    {
+      "conversationId": "conv_001_session_01",
+      "userId": "user_001_alice",
+      "sessionStarted": "2025-09-30T14:00:00Z",
+      "lastMessageTimestamp": "2025-09-30T14:22:00Z",
+      "messages": [
+        {
+          "messageId": "msg_001",
+          "timestamp": "2025-09-30T14:05:00Z",
+          "role": "user",
+          "content": "What's the difference between Base and Ethereum mainnet?"
+        },
+        {
+          "messageId": "msg_002",
+          "timestamp": "2025-09-30T14:05:15Z",
+          "role": "assistant",
+          "content": "Great question, Explorer! Base is a Layer 2 network built on top of Ethereum. Think of Ethereum mainnet as the main highway—it's secure but can get congested and expensive. Base is like an express lane built above it. Transactions on Base are much faster and cost way less (often under a cent!), but they still inherit Ethereum's security. For your Gas Fee Awareness mission, you'll experience this speed difference firsthand! 🚀"
+        },
+        {
+          "messageId": "msg_003",
+          "timestamp": "2025-09-30T14:18:00Z",
+          "role": "user",
+          "content": "How do I add Base to MetaMask?"
+        },
+        {
+          "messageId": "msg_004",
+          "timestamp": "2025-09-30T14:18:20Z",
+          "role": "assistant",
+          "content": "Perfect timing! Step 1 of your current mission covers exactly that. Click the Chainlist link in your mission steps—it'll automatically add Base network to MetaMask with one click. Just make sure you're connected to the official chainlist.org site (you'll see the green verification in your HUD). Want me to walk you through what happens when you click it?"
+        }
+      ],
+      "contextData": {
+        "currentMissionId": "mission_008",
+        "currentExpeditionId": "expedition_2",
+        "userLevel": 4,
+        "recentTopics": ["layer2", "base", "metamask"]
+      }
+    },
+    {
+      "conversationId": "conv_002_session_01",
+      "userId": "user_002_bob",
+      "sessionStarted": "2025-09-30T12:00:00Z",
+      "lastMessageTimestamp": "2025-09-30T12:10:00Z",
+      "messages": [
+        {
+          "messageId": "msg_005",
+          "timestamp": "2025-09-30T12:05:00Z",
+          "role": "user",
+          "content": "How much does an ENS name cost?"
+        },
+        {
+          "messageId": "msg_006",
+          "timestamp": "2025-09-30T12:05:10Z",
+          "role": "assistant",
+          "content": "ENS names have two costs: a registration fee and gas fees. The registration fee depends on the name length—3-character names cost more than 5+ character names. Plus there's an annual renewal fee (about $5/year for most names). You'll also pay Ethereum gas fees for the registration transaction. Tip: Register during off-peak hours when gas is cheaper, and consider starting with a longer name to keep costs down! 💡"
+        }
+      ],
+      "contextData": {
+        "currentMissionId": "mission_004",
+        "currentExpeditionId": "expedition_1",
+        "userLevel": 2,
+        "recentTopics": ["ens", "costs", "gas_fees"]
+      }
+    }
+  ]
+}
+
+// ============================================================
+// COLLECTION: system_config
+// Platform-wide configuration and feature flags
+// ============================================================
+
+{
+  "system_config": [
+    {
+      "configId": "global_settings",
+      "maintenanceMode": false,
+      "registrationEnabled": true,
+      "hudPluginVersion": "1.0.2",
+      "minimumHudPluginVersion": "1.0.0",
+      "auraEnabled": true,
+      "leaderboardEnabled": true,
+      "announcementBanner": {
+        "enabled": true,
+        "message": "New missions coming soon in Expedition 3! 🎨",
+        "type": "info",
+        "dismissible": true
+      },
+      "supportedNetworks": [
+        {
+          "chainId": "1",
+          "name": "Ethereum Mainnet",
+          "rpcUrl": "https://eth-mainnet.g.alchemy.com/v2/",
+          "blockExplorer": "https://etherscan.io",
+          "nativeCurrency": "ETH"
+        },
+        {
+          "chainId": "8453",
+          "name": "Base",
+          "rpcUrl": "https://mainnet.base.org",
+          "blockExplorer": "https://basescan.org",
+          "nativeCurrency": "ETH"
+        },
+        {
+          "chainId": "84532",
+          "name": "Base Sepolia Testnet",
+          "rpcUrl": "https://sepolia.base.org",
+          "blockExplorer": "https://sepolia.basescan.org",
+          "nativeCurrency": "ETH"
+        },
+        {
+          "chainId": "10",
+          "name": "Optimism",
+          "rpcUrl": "https://mainnet.optimism.io",
+          "blockExplorer": "https://optimistic.etherscan.io",
+          "nativeCurrency": "ETH"
+        }
+      ],
+      "verifiedDomainWhitelist": [
+        "metamask.io",
+        "app.ens.domains",
+        "app.uniswap.org",
+        "opensea.io",
+        "zora.co",
+        "chainlist.org",
+        "bridge.base.org",
+        "www.alchemy.com"
+      ],
+      "lastUpdated": "2025-09-25T10:00:00Z"
+    }
+  ]
+}

@@ -1,0 +1,330 @@
+# Web3 Quest Hub: Technical Specification Document
+
+| Document ID | TSD-W3QH-V1.0 |
+| :--- | :--- |
+| Date | 2025-09-30 |
+| Status | Final Draft |
+| Author | Lead Technical Architect |
+
+---
+
+### 1. System Architecture Overview
+
+The Web3 Quest Hub is a multi-component platform architected for scalability, security, and a seamless user experience. The system leverages a Next.js frontend for a dynamic web application, Firebase for backend-as-a-service (BaaS) capabilities, and a lightweight browser extension to bridge the gap between the learning environment and the live Web3 ecosystem.
+
+Core Interaction Flow:
+
+1.  User Interaction: The user interacts with the Next.js Web App and the Web3 HUD Browser Plugin.
+2.  Authentication & Data: The Next.js app communicates directly with Firebase Authentication for user management and Firestore for all data persistence (user profiles, quest status, etc.).
+3.  Backend Logic: Critical and secure operations are handled by Firebase Functions. This includes on-chain verification and interaction with the AURA AI companion.
+4.  AI Support: The frontend calls a dedicated Firebase Function which acts as a secure backend proxy to the Google Gemini API, enriching user queries with context.
+5.  On-Chain Verification: The verification function interacts with a Web3 API Provider (e.g., Alchemy) to validate user actions on the blockchain.
+6.  Contextual HUD: The Web3 HUD communicates with the main web app to sync the user's active mission state and provides real-time security alerts by monitoring browser activity and wallet interactions on external dApps.
+
+Architectural Diagram:
+
+```mermaid
+graph TD
+    subgraph "User's Browser"
+        A[Next.js Web App]
+        B[Web3 HUD Plugin]
+    end
+
+    subgraph "Firebase (GCP)"
+        C[Firebase Authentication]
+        D[Firestore Database]
+        E[Firebase Functions]
+        F[Google Secret Manager]
+    end
+
+    subgraph "Third-Party Services"
+        G[Google Gemini API]
+        H[Web3 API Provider e.g., Alchemy]
+    end
+
+    subgraph "External Web3 dApps"
+        I[e.g., Uniswap, OpenSea]
+    end
+
+    A <--> C
+    A <--> D
+    A ---|HTTPS Call| E
+
+    B <-->|Browser Messaging| A
+    B --|Monitors & Injects UI| I
+
+    E ---|verifyMissionCompletion| H
+    E ---|getAuraResponse| G
+    E <--> D
+    E -->|API Keys| F
+```
+
+---
+
+### 2. Firebase/Firestore Data Schema
+
+Firestore will serve as the single source of truth for all application data. The schema is designed to be scalable and secure, with user data partitioned for privacy.
+
+#### 2.1. Collections
+
+| Collection Path | Description |
+| :--- | :--- |
+| `users/{userId}` | Stores public and private profile information for each user. The `userId` corresponds to the Firebase Auth UID. |
+| `quests/{questId}` | A public, read-only collection containing the definitions for all missions, including lore, rewards, and verification criteria. |
+| `userQuests/{userId}/quests/{questId}` | Tracks the status of each quest for a specific user, such as `in-progress` or `completed`. |
+| `levels` | A static, read-only collection defining the XP thresholds and rewards for each Explorer Level. |
+
+#### 2.2. Document Structures
+
+`users/{userId}`
+```json
+{
+  "displayName": "string",
+  "email": "string",
+  "walletAddress": "string",
+  "totalXP": "number",
+  "explorerLevel": "number",
+  "createdAt": "timestamp",
+  "updatedAt": "timestamp"
+}
+```
+
+`quests/{questId}`
+```json
+{
+  "title": "string",
+  "expeditionId": "string", // e.g., "digital-frontier"
+  "difficulty": "string", // e.g., "Beginner"
+  "xpReward": "number",
+  "badge": {
+    "id": "string",
+    "name": "string",
+    "iconUrl": "string"
+  },
+  "lore": "string",
+  "actionPlan": [ // Array of step descriptions
+    "string"
+  ],
+  "verification": {
+    "type": "string", // "balance_check", "tx_history_check", "event_check"
+    "params": {
+      // Structure varies based on 'type'
+      // Example for 'balance_check':
+      "targetChainId": "number", // e.g., 1 for Mainnet
+      "tokenAddress": "string", // or 'ETH' for native currency
+      "minAmount": "number"
+    }
+  }
+}
+```
+
+`userQuests/{userId}/quests/{questId}`
+```json
+{
+  "status": "string", // "locked", "available", "in-progress", "completed"
+  "completedAt": "timestamp | null",
+  "earnedBadgeId": "string | null"
+}
+```
+
+`levels/{levelNumber}`
+```json
+{
+  "title": "string",
+  "cumulativeXpRequired": "number",
+  "unlockDescription": "string"
+}
+```
+
+#### 2.3. Firestore Security Rules
+
+These rules enforce the principle of least privilege, ensuring data integrity and user privacy.
+
+```
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Users can read and write their own profile data. No one else can.
+    match /users/{userId} {
+      allow read, update, create: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // Quests and Levels are public, read-only content for all authenticated users.
+    match /quests/{questId} {
+      allow read: if request.auth != null;
+      allow write: if false; // No client-side writes
+    }
+    match /levels/{levelNumber} {
+      allow read: if request.auth != null;
+      allow write: if false; // No client-side writes
+    }
+
+    // Users can read and update their own quest progress.
+    match /userQuests/{userId}/quests/{questId} {
+      allow read, create, update: if request.auth != null && request.auth.uid == userId;
+    }
+  }
+}
+```
+
+---
+
+### 3. Next.js Frontend Component Architecture
+
+The frontend is built with reusable React components, following a modular and hierarchical structure based on the wireframes.
+
+#### 3.1. Component Hierarchy
+
+-   `_app.tsx` (Root)
+    -   `AuthProvider` (Manages Firebase Auth state)
+    -   `Layout`
+        -   `Header` (Sticky navigation)
+        -   `main` (Page content)
+        -   `AuraChatWidget` (Floating)
+-   `pages/dashboard.tsx`
+    -   `ExplorerDashboard`
+        -   `ProgressSidebar`
+        -   `QuestGrid`
+            -   `QuestCard` (Multiple instances)
+-   `pages/profile.tsx`
+    -   `AvatarConsole`
+        -   `XPCore` (Circular progress chart)
+        -   `ArtifactInventory`
+            -   `BadgeGrid`
+        -   `Logbook` (Activity feed)
+-   `components/modals/MissionBriefModal.tsx`
+
+#### 3.2. Key Component Details
+
+| Component | Purpose & Functionality | Props | State Management |
+| :--- | :--- | :--- | :--- |
+| `ExplorerDashboard` | Main dashboard view. Renders the user's progress and the grid of available quests. | `user: User`, `quests: Quest[]`, `userQuests: UserQuest[]` | `const [filteredQuests, setFilteredQuests] = useState(quests)` <br> `const [selectedQuest, setSelectedQuest] = useState(null)` |
+| `QuestGrid` | Displays quests as a grid of cards, organized by "Expedition". | `quests: Quest[]`, `onSelectQuest: (questId) => void` | Manages internal layout (grid/list) and applies filters passed from `ExplorerDashboard`. |
+| `MissionBriefModal` | A modal overlay showing detailed information for a selected quest. Contains the action plan and verification trigger. | `quest: Quest`, `isOpen: boolean`, `onClose: () => void` | `const [isLoading, setIsLoading] = useState(false)` <br> Manages input for verification data (e.g., wallet address). Triggers `verifyMissionCompletion` function on button click. |
+| `AvatarConsole` | The user's profile page. Displays XP, level, badges, and activity log. | `user: User`, `completedQuests: UserQuest[]` | Fetches and displays data derived from props, such as calculating progress to the next level. |
+
+---
+
+### 4. Backend Services & API Endpoints (Firebase Functions)
+
+Serverless functions handle secure backend logic, protecting API keys and ensuring atomic data operations.
+
+| Function Name | Trigger | Request (Payload) | Response (Success) | Core Logic |
+| :--- | :--- | :--- | :--- | :--- |
+| `verifyMissionCompletion` | HTTPS Callable | `{ "questId": "string" }` | `{ "success": true, "xpGained": number, "leveledUp": boolean }` | 1. Fetch user `walletAddress` from Firestore. <br> 2. Fetch `verification` criteria from `quests/{questId}`. <br> 3. Call Web3 API Provider with criteria to check on-chain data. <br> 4. If successful, start a Firestore transaction: <br> &nbsp;&nbsp;&nbsp;&nbsp;a. Increment `users/{userId}.totalXP`. <br> &nbsp;&nbsp;&nbsp;&nbsp;b. Check against `levels` table and update `users/{userId}.explorerLevel` if needed. <br> &nbsp;&nbsp;&nbsp;&nbsp;c. Update `userQuests/.../{questId}.status` to `completed`. <br> 5. Return result to client. |
+| `getAuraResponse` | HTTPS Callable | `{ "prompt": "string", "context": { "questId": "string", "currentStep": number } }` | `{ "response": "string" }` | 1. Validate user input. <br> 2. Fetch user level and quest details from Firestore using the context. <br> 3. Construct a detailed system prompt for Gemini, including persona rules, safety guardrails, and user context. <br> 4. Call Gemini API via its SDK, passing the full prompt. <br> 5. Sanitize and return the AI-generated response. |
+
+---
+
+### 5. AURA AI Companion Integration (Gemini)
+
+Interaction with the Gemini API is securely managed through the `getAuraResponse` Firebase Function. This prevents client-side exposure of API keys and allows for server-side context enrichment.
+
+API Endpoint: The endpoint is the HTTPS-callable Firebase Function: `getAuraResponse`.
+
+Context Data Structure:
+The client sends a payload to the function, which is then used to construct the final prompt for the Gemini model.
+
+*Client-side Request Body:*
+```javascript
+const payload = {
+  prompt: "How do I check my transaction status?",
+  context: {
+    questId: "the-simple-swap",
+    currentStep: 3,
+  }
+};
+// const getAuraResponse = httpsCallable(functions, 'getAuraResponse');
+// await getAuraResponse(payload);
+```
+
+*Server-side Prompt Construction for Gemini:*
+The function will prepend a system instruction to the user's prompt.
+```
+// System Instruction (sent with every call)
+You are AURA (Augmented Universal Resource Assistant), an expert, enthusiastic, and friendly guide for Web3 beginners.
+Your goal is to provide clear, encouraging support.
+NEVER ask for private keys or seed phrases.
+NEVER give financial advice. Direct users to the Mission Brief for verified links.
+
+// Dynamic Context (added by the function)
+User's Current State:
+- Explorer Level: 5
+- Active Quest: "The Simple Swap"
+- Current Step: 3 ("Confirm the transaction in your wallet.")
+
+// User's Prompt (from payload)
+User asks: "How do I check my transaction status?"
+
+// AURA's Formulated Response (what Gemini generates)
+That's a great question! Once you've sent a transaction, you can track its progress on a 'block explorer' like Etherscan. It's like a public tracking page for all network activity. Your Mission Brief has a link to the right one for this quest! Did you get the confirmation popup in your wallet yet?
+```
+
+---
+
+### 6. Web3 HUD Browser Plugin Logic
+
+The browser plugin acts as an active co-pilot, providing context-sensitive guidance and security alerts. It consists of a background script, content scripts, and a simple UI.
+
+#### 6.1. Manifest (`manifest.json`)
+
+The manifest will define permissions required for operation.
+```json
+{
+  "manifest_version": 3,
+  "name": "Web3 Quest Hub HUD",
+  "version": "1.0",
+  "permissions": [
+    "storage",      // To store active quest state
+    "tabs",         // To detect URL changes
+    "scripting"     // To inject content scripts and UI
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content_script.js"]
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html"
+  }
+}
+```
+
+#### 6.2. Background Script (`background.js`)
+
+The service worker manages state and orchestrates communication.
+
+*   Core Logic:
+    1.  Listen for messages from Web App:
+        -   Use `chrome.runtime.onMessage.addListener` to receive `activeQuest` data from the Next.js app.
+        -   The message payload should include `{ questId, currentStep, whitelistedDomains: [...] }`.
+        -   Store this data in `chrome.storage.local`.
+    2.  Monitor Tab Navigation:
+        -   Use `chrome.tabs.onUpdated.addListener` to check the URL of any updated tab.
+        -   On URL change, retrieve active quest data from storage.
+        -   Compare the new URL's domain against the `whitelistedDomains`.
+        -   Send a message to the content script in that tab with the verification status (`'VERIFIED'`, `'UNVERIFIED'`, or `'NONE'`).
+
+#### 6.3. Content Script (`content_script.js`)
+
+The content script interacts directly with the visited webpage.
+
+*   Core Logic:
+    1.  Receive Messages from Background Script:
+        -   Listen for messages with the domain verification status.
+        -   Based on the status, inject or update a small, fixed-position UI element (the HUD).
+        -   `VERIFIED` state: Display a green checkmark or border.
+        -   `UNVERIFIED` state: Display a prominent red/amber warning icon and border.
+    2.  Monitor Wallet Interactions:
+        -   Safely access `window.ethereum` if it exists.
+        -   Wrap the `request` method to intercept calls like `eth_sendTransaction`.
+        -   Before passing the request through, analyze the payload for common risks (e.g., unlimited approvals via `setApprovalForAll` or large `approve` amounts).
+        -   If a risk is detected, display a warning modal through the HUD UI before the user's wallet prompt appears.
+    3.  Display Status Updates:
+        -   The HUD UI will also display the `currentStep` description received from the background script, acting as a persistent reminder.
+        -   Listen for "success" messages from the background script (relayed from the web app) to show a celebratory toast (`"Swap Verified! +150 XP"`).

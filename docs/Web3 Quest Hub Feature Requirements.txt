@@ -1,0 +1,878 @@
+# Web3 Quest Hub: Feature Requirements Document
+
+**Version:** 1.0  
+**Date:** 2025  
+**Purpose:** Technical feature specifications to guide development of the Web3 Quest Hub platform
+
+---
+
+## 1. CORE PLATFORM FEATURES
+
+### 1.1 User Authentication & Profile Management
+
+**FR-1.1.1: Multi-Method Authentication**
+- Support email/password authentication
+- Support OAuth (Google, Twitter/X)
+- Implement secure session management with token refresh
+- Support wallet-based authentication (future enhancement)
+- Enforce username uniqueness with validation (3-20 characters, alphanumeric + underscore)
+- Provide password recovery flow
+
+**FR-1.1.2: User Profile System**
+- Store user identity: unique ID, email, username, creation date
+- Track progression metrics: total XP, current level, quests completed
+- Store wallet address (optional, nullable field)
+- Support avatar customization (unlocked at Level 10+)
+- Track theme preferences: HUD accent color, console background theme
+- Maintain last login timestamp for activity tracking
+
+**FR-1.1.3: Wallet Connection**
+- Allow users to connect Ethereum-compatible wallet addresses
+- Validate wallet address format (0x + 40 hex characters)
+- Support disconnection and reconnection
+- Display wallet connection status prominently
+- Store single wallet address per user (one-to-one relationship)
+
+### 1.2 Quest & Mission System
+
+**FR-1.2.1: Expedition Structure**
+- Organize quests into 3 expeditions:
+  - Expedition 1: Digital Frontier (4 quests, Level 1+)
+  - Expedition 2: Trading Outpost (4 quests, Level 4+)
+  - Expedition 3: Artifact Quarter (4 quests, Level 6+)
+- Enforce level-based access control for expeditions
+- Display expedition unlock requirements when locked
+
+**FR-1.2.2: Quest Data Model**
+- Store quest metadata: ID, title, metaverse action description, platform
+- Define quest parameters: difficulty (⭐), time estimate, XP reward, order index
+- Store prerequisite requirements as structured data (JSONB)
+- Define verification type and parameters per quest
+- Include step-by-step guide data (numbered action plan)
+- Store external link URLs with security metadata
+- Reference help resources: video URLs, text guides, community links
+
+**FR-1.2.3: Quest State Management**
+- Track quest states per user: not started, in progress, completed
+- Record start timestamp when quest begins
+- Store current step number for in-progress quests
+- Record completion timestamp when verified
+- Store verification proof data (transaction hash, screenshot URL, etc.)
+- Prevent duplicate quest completions
+
+**FR-1.2.4: Quest Filtering & Navigation**
+- Filter quests by status: All, In Progress, Completed, Recommended
+- Display quests in sequential order within expeditions
+- Show visual pathways connecting sequential quests
+- Highlight next recommended quest based on user level and progress
+- Dim/disable locked quests with clear visual indicators
+
+### 1.3 XP & Progression System
+
+**FR-1.3.1: Experience Points (XP) System**
+- Award XP upon successful quest completion per defined rewards
+- Calculate cumulative XP for user account
+- Display XP progress toward next level
+- Show XP breakdown by expedition (for analytics)
+
+**FR-1.3.2: Level Progression**
+- Implement 10-level progression system with defined XP thresholds:
+  - Level 1: 0 XP (start)
+  - Level 2: 500 XP
+  - Level 3: 1,250 XP
+  - Level 4: 2,250 XP
+  - Level 5: 3,500 XP
+  - Level 6: 5,000 XP
+  - Level 7: 6,750 XP
+  - Level 8: 8,750 XP
+  - Level 9: 11,000 XP
+  - Level 10: 13,500 XP
+- Automatically calculate level based on total XP
+- Trigger level-up events with appropriate notifications
+- Unlock features at specific levels (see FR-1.3.3)
+
+**FR-1.3.3: Level-Based Feature Unlocks**
+- Level 1: Access to Expedition 1
+- Level 2: Logbook history view
+- Level 3: AURA Security Health Check
+- Level 4: Access to Expedition 2
+- Level 5: Leaderboard access
+- Level 6: Access to Expedition 3
+- Level 7: Custom profile tag
+- Level 8: Advanced wallet analysis tools
+- Level 9: Dashboard theme selector
+- Level 10: Advanced quests + Customization Bay
+
+### 1.4 Achievement & Badge System
+
+**FR-1.4.1: Badge Data Model**
+- Define badge metadata: ID, name, description, icon URL
+- Categorize badges by type: expedition, social, special
+- Store unlock criteria as structured data
+- Link badges to specific quests or achievements
+
+**FR-1.4.2: Badge Award System**
+- Award badge upon quest completion (if defined)
+- Award badges for milestone achievements (streaks, friend count, etc.)
+- Prevent duplicate badge awards
+- Record timestamp when badge earned
+- Trigger badge earned notifications and animations
+
+**FR-1.4.3: Badge Display**
+- Display earned badges in full color with details
+- Show locked badges as grayscale/opaque with unlock criteria
+- Organize badges by expedition
+- Provide detailed badge modal: name, date earned, related quest, share button
+- Support badge sharing to social media platforms
+
+---
+
+## 2. VERIFICATION SYSTEM
+
+### 2.1 Multi-Type Verification Architecture
+
+**FR-2.1.1: Verification Type Registry**
+Support multiple verification methods:
+- `api` - Automated blockchain/API verification
+- `balance` - Check wallet balance meets threshold
+- `transaction` - Verify specific transaction occurred
+- `manual` - Admin review with proof submission
+- `quiz` - Knowledge check (3 questions)
+
+**FR-2.1.2: Verification Parameter Storage**
+- Store verification logic as structured JSON per quest
+- Include all parameters needed for verification check
+- Support flexible parameter schemas per verification type
+
+### 2.2 Blockchain Verification
+
+**FR-2.2.1: Wallet Address Verification**
+- Validate Ethereum address format (checksum validation)
+- Verify address is not zero address
+- Return success/failure with clear error messages
+
+**FR-2.2.2: Balance Verification**
+- Query balance via blockchain API (Alchemy/Etherscan)
+- Support ETH and ERC-20 token balances
+- Compare balance against minimum threshold
+- Support multiple chains (mainnet, Base, Optimism, etc.)
+- Handle API rate limits gracefully
+
+**FR-2.2.3: Transaction History Verification**
+- Query transaction history via blockchain explorer API
+- Filter by time window (e.g., last 30 days)
+- Verify at least one confirmed transaction exists
+- Support filtering by transaction type (sent/received)
+
+**FR-2.2.4: Smart Contract Interaction Verification**
+- Query contract-specific interactions (Uniswap swaps, NFT mints)
+- Use The Graph subgraphs for protocol-specific data
+- Verify function calls or events match quest requirements
+- Validate transaction amounts meet minimum thresholds
+- Confirm successful transaction execution
+
+**FR-2.2.5: NFT Ownership Verification**
+- Query NFT balance via Alchemy NFT API or OpenSea API
+- Verify ownership of specific collection (if specified)
+- Check for recent mints within time window
+- Return NFT contract address and token ID as proof
+
+**FR-2.2.6: ENS Name Verification**
+- Query ENS registry for name ownership
+- Verify name resolves to user's wallet address
+- Perform reverse lookup to confirm linkage
+
+**FR-2.2.7: Protocol-Specific Verification**
+- Farcaster: Verify profile handle exists via Farcaster API
+- Discord/Collab.Land: Verify role assignment via Discord API
+- Layer 2: Verify transaction on specific L2 network
+
+### 2.3 Manual Verification
+
+**FR-2.3.1: Proof Submission**
+- Allow users to upload screenshot/proof file
+- Support image formats: PNG, JPG, JPEG (max 5MB)
+- Store files in secure cloud storage with unique paths
+- Create pending verification record with proof URL
+- Display submission status to user ("Pending review")
+
+**FR-2.3.2: Admin Review Interface**
+- Queue pending manual verifications for admin review
+- Display proof image with quest context
+- Provide approve/reject actions
+- Record reviewer ID and review timestamp
+- Notify user of review outcome
+- Award XP/badges upon approval
+
+### 2.4 Quiz Verification
+
+**FR-2.4.1: Quiz System**
+- Store quiz questions per quest (3 questions typical)
+- Support multiple choice answers
+- Validate user responses against correct answers
+- Require minimum score for quest completion (e.g., 2/3 correct)
+- Provide immediate feedback on quiz results
+
+### 2.5 Verification Flow
+
+**FR-2.5.1: Verification Trigger**
+- User clicks "Scan Blockchain & Verify Portal" button
+- System enters loading state with progress indicator
+- Execute appropriate verification method based on quest type
+- Display result within 5 seconds (or timeout message)
+
+**FR-2.5.2: Verification Result Handling**
+- Success: Award XP, badge, update quest status, trigger animations
+- Failure: Display clear error message with troubleshooting guidance
+- Timeout: Allow retry with exponential backoff
+- Log all verification attempts for debugging
+
+**FR-2.5.3: XP Award & Level Calculation**
+- Atomically update user's total XP upon verification success
+- Check if new XP crosses level threshold
+- Update user level if threshold crossed
+- Create activity feed entry for quest completion
+- Check for and award milestone achievements
+- Update leaderboard rankings
+
+---
+
+## 3. USER INTERFACE COMPONENTS
+
+### 3.1 Global Navigation (Command Bar)
+
+**FR-3.1.1: Navigation Structure**
+- Sticky header bar (desktop) or footer bar (mobile)
+- Semi-transparent background with blur effect
+- Logo/home link on left
+- Module links: The Map (Quests), The Console (Profile), The Ledger (Leaderboard), The Vault (Rewards)
+- User status display: @username, Level X, XP progress bar
+- Utility icons: Help/Comms, Notifications, Settings
+- Active state highlighting for current module
+
+**FR-3.1.2: XP Progress Bar (Power Cell)**
+- Segmented progress visualization with cyan glow
+- Display current XP / next level XP
+- Show next level number prominently
+- Animate fill on XP gains
+- Pulse effect when approaching level up
+- Click to view detailed XP breakdown
+
+**FR-3.1.3: Notification System**
+- Display unread notification count badge
+- Show notification panel on click
+- List notifications by type: quest, achievement, social, system
+- Mark notifications as read
+- Clear/dismiss individual notifications
+- Support notification filtering
+
+### 3.2 Quest Dashboard (The Map)
+
+**FR-3.2.1: Star Map Visualization**
+- Render interactive star map canvas
+- Display 3 constellation regions for expeditions
+- Show quest nodes as pulsing spheres
+- Connect nodes with glowing pathways
+- Animate particle effects in background
+- Support zoom/pan interactions (optional enhancement)
+
+**FR-3.2.2: Quest Node States**
+- Available: Pulsing blue sphere with platform icon
+- In Progress: Yellow/amber glow
+- Completed: Solid green with checkmark
+- Locked: Dimmed with fog overlay + lock icon
+- Display hover card with quest summary on mouseover
+
+**FR-3.2.3: Pathway Visualization**
+- Draw pathways connecting sequential quests
+- Completed pathways: Solid green line
+- Active pathway: Pulsing electric blue
+- Locked pathways: Dimmed/dashed line
+- Enforce sequential quest flow visually
+
+**FR-3.2.4: Constellation Interaction**
+- Hover over constellation highlights all associated nodes
+- Click constellation to filter/focus on that expedition
+- Display expedition name and description
+- Show lock status with level requirement if locked
+
+### 3.3 Mission Brief Modal
+
+**FR-3.3.1: Modal Structure**
+- Large centered modal with blurred background overlay
+- Close button (top right)
+- Back navigation (top left)
+- Responsive two-column layout (desktop) / stacked (mobile)
+
+**FR-3.3.2: Quest Information Display**
+- Header: Title, platform icon, difficulty stars, time estimate
+- Rewards grid: XP amount, badge icon with flash animation
+- Brief: Narrative metaverse action description
+- Intel & Prerequisites: Checklist with dynamic status checks
+- Action Plan: Numbered steps with concise instructions
+- External link buttons: "Open [Platform] Portal" with security warning
+
+**FR-3.3.3: Verification Section**
+- Status indicator: "Awaiting data..." (amber) or "Ready to verify" (green)
+- Input field for wallet address (if required)
+- Primary action button: "Scan Blockchain & Verify Portal"
+- Loading state with progress animation
+- Success/failure result display
+
+**FR-3.3.4: Help Resources**
+- "Need Help?" section at bottom
+- Links to video tutorial, text guide, community support
+- Video embed or modal (optional)
+- Community links open in new tab
+
+**FR-3.3.5: Security Warnings**
+- Display warning modal before external link opens
+- Warning text: "You are leaving Quest Hub. Verify URL begins with https://[platform].com"
+- Confirm/cancel buttons
+- Remember preference option (optional)
+
+### 3.4 Profile Console (Avatar Console)
+
+**FR-3.4.1: Identity Panel**
+- User avatar display (circular, prominent)
+- @username and current level
+- Wallet address with copy button
+- Wallet connection status indicator
+
+**FR-3.4.2: XP Core Visualization**
+- Large circular progress chart showing % to next level
+- Center text: Percentage complete
+- Subtitle: Current XP / Required XP to Level X
+- Next unlock callout: Features gained at next level
+- Hover tooltips showing XP by expedition
+
+**FR-3.4.3: Mission Completion Statistics**
+- Total missions completed count
+- Completion rate per expedition (with progress bars)
+- Visual breakdown: "4/4 Complete (100%)" per expedition
+
+**FR-3.4.4: Activity Feed (Logbook)**
+- Scrollable chronological activity list
+- Timestamped entries: quest completions, level ups, badges earned
+- Filter options: All, Badges, Levels, date range
+- Pagination for long histories
+
+**FR-3.4.5: Badge Inventory**
+- Responsive grid layout for badges
+- Earned badges: Full color, clickable
+- Locked badges: Grayscale with lock icon and unlock criteria
+- Badge detail modal: Name, date earned, description, share button
+- Organization by expedition category
+
+**FR-3.4.6: Customization Bay**
+- Unlocked at Level 10+
+- Avatar type selector: Explorer, Trader, Collector, Builder
+- HUD accent color picker: Electric Blue, Neon Green, Electric Purple, Cyber Pink
+- Console background theme: Space Void, Digital Grid, Nebula Cloud, Matrix Code
+- Preview changes before applying
+- Save button to persist preferences
+
+**FR-3.4.7: Connected Web3 Assets**
+- Display ENS name if earned
+- Show NFT count from quest-related collections
+- Indicate L2 network usage status
+- Link to detailed asset view (optional)
+
+### 3.5 Leaderboard (The Ledger)
+
+**FR-3.5.1: Leaderboard Display**
+- Ranked list of users by total XP
+- Display: Rank, username, level, XP (current period)
+- Highlight current user's position
+- Top 3 users with medal icons (gold, silver, bronze)
+
+**FR-3.5.2: Leaderboard Filtering**
+- Time period filters: This Week, This Month, All Time
+- Category filters: All, DeFi Specialists, NFT Collectors, DAO Participants
+- Real-time or periodic updates (every 5 minutes)
+
+**FR-3.5.3: User Positioning**
+- Always show current user's rank even if not in top 10
+- Scroll-to-user button
+- Compare stats with other users (optional)
+
+### 3.6 Theme & Aesthetics
+
+**FR-3.6.1: Color Palette**
+- Background: Deep black (#0a0a0a) or dark charcoal
+- Primary accent: Electric cyan (#00d4ff)
+- Secondary accent: Electric purple/magenta (#9d4edd)
+- Success: Solid green (#10b981)
+- Warning: Amber (#f59e0b)
+- Error: Red with pulse animation
+
+**FR-3.6.2: Typography**
+- Body text: Inter (sans-serif), clean and geometric
+- Technical/HUD elements: Fira Code (monospace)
+- Heading hierarchy: H1, H2, H3 with appropriate sizing
+- Consistent font weights and line heights
+
+**FR-3.6.3: Visual Effects**
+- Frosted glass (backdrop-filter blur) for modals and panels
+- Glow effects on interactive elements (buttons, nodes)
+- Particle effects in background (subtle, non-distracting)
+- Smooth CSS transitions (opacity, transform)
+- Hover states: Glow + slight scale increase
+
+**FR-3.6.4: Responsive Design**
+- Mobile-first approach
+- Breakpoints: Mobile (<768px), Tablet (768-1024px), Desktop (>1024px)
+- Command bar converts to footer bar on mobile
+- Two-column layouts stack on mobile
+- Touch targets minimum 44x44px
+- Simplified star map view on mobile (optional: switch to card grid)
+
+---
+
+## 4. ANIMATIONS & INTERACTIONS
+
+### 4.1 Quest Completion Celebration
+
+**FR-4.1.1: Success Animation Sequence**
+- Badge icon flies in from center of screen
+- Icon explodes into cyan particles
+- XP counter animates upward (number count-up)
+- Power Cell fills with glowing animation
+- Success sound plays (ascending chime)
+- Green checkmark confirmation overlay
+- Auto-close after 3 seconds or user dismiss
+
+### 4.2 Level Up Sequence
+
+**FR-4.2.1: Level Up Animation**
+- Screen flash effect (cyan pulse)
+- Large "LEVEL UP" text appears
+- New level number spins/counts up
+- Fanfare sound plays (epic, celebratory)
+- Display level unlocks modal with new features
+- Confetti/particle burst effect
+- User must acknowledge to continue
+
+### 4.3 Micro-interactions
+
+**FR-4.3.1: Button Interactions**
+- Glow effect on hover (brightness increase)
+- Slight scale increase on hover (1.05x)
+- Click produces digital "ping" sound
+- Loading states show spinner or progress indicator
+- Disabled state: Reduced opacity, no hover effect
+
+**FR-4.3.2: Node Interactions**
+- Pulse animation on available nodes (continuous)
+- Glow intensifies on hover
+- Pathway illuminates on node hover
+- Click opens modal with smooth fade-in transition
+- Completed nodes show brief checkmark pulse
+
+**FR-4.3.3: Loading States**
+- Holographic loading spinner for verification
+- "Scanning blockchain..." text with animated ellipsis
+- Pulsing amber indicator during async operations
+- Timeout fallback message after 10 seconds
+
+---
+
+## 5. SOUND DESIGN
+
+### 5.1 Audio System
+
+**FR-5.1.1: Sound Library**
+- Background ambient hum (looping, subtle, low-frequency)
+- Navigation click/ping (short, crisp, synthetic)
+- Quest complete chime (ascending synthesizer, satisfying)
+- Level up fanfare (epic, celebratory, 2-3 seconds)
+- Error tone (distinct, medium-frequency, non-alarming)
+- Notification blip (attention-grabbing, brief)
+
+**FR-5.1.2: Audio Management**
+- Preload all sound effects for instant playback
+- Volume control in settings (0-100%)
+- Mute toggle in settings
+- Respect user preference across sessions
+- Disable sounds by default on mobile (battery consideration)
+- Use Howler.js or similar audio library
+
+**FR-5.1.3: Sound Triggers**
+- Navigation clicks: Play ping sound
+- Quest start: Play activation sound
+- Verification scanning: Play scanning sound (looping during check)
+- Quest complete: Play chime + stop scanning sound
+- Level up: Play fanfare
+- Error: Play error tone
+- Notification: Play blip
+
+---
+
+## 6. AURA AI COMPANION
+
+### 6.1 AURA Chat Interface
+
+**FR-6.1.1: Chat Widget**
+- Floating circular chat bubble (bottom-right corner)
+- Primary blue color with icon
+- Minimized state shows "Need Help?" prompt
+- Click to expand into chat modal
+- Modal overlays lower-right corner
+- Close/minimize button in header
+
+**FR-6.1.2: Conversational Interface**
+- Text input field for user messages
+- Send button or Enter key to submit
+- Display conversation history (scrollable)
+- User messages aligned right, AURA messages aligned left
+- Typing indicator when AURA is responding
+- Auto-scroll to latest message
+
+**FR-6.1.3: Contextual Quick Prompts**
+- Display clickable prompt buttons based on active quest
+- Examples: "Explain Gas Fees", "What is a Seed Phrase?", "How do I verify?"
+- Dynamically update prompts as user progresses
+- Maximum 3-4 prompts visible at once
+
+### 6.2 AURA Intelligence
+
+**FR-6.2.1: Context Awareness**
+- Receive user context in API payload: active_mission_id, active_step_number
+- Reference current quest in responses
+- Prioritize answers relevant to user's current activity
+- Remember conversation context within session
+
+**FR-6.2.2: Persona & Tone**
+- Enthusiastic, supportive, clear tone
+- Use simple language and contemporary phrasing
+- Provide definitions for jargon terms inline
+- Sound like an expert friend, not a robotic manual
+- Use contractions for natural speech
+
+**FR-6.2.3: Safety Guardrails**
+- NEVER ask for or accept seed phrases, private keys, passwords
+- Issue bold warning if user mentions sharing sensitive data
+- NEVER give specific investment advice
+- Include disclaimer: "I'm educational, not a financial advisor. DYOR."
+- Do not generate external URLs (refer to Mission Brief)
+- Provide phishing/scam guidance when asked
+
+**FR-6.2.4: Response Formatting**
+- Concise single-paragraph answers for general queries
+- Include follow-up questions to encourage progression
+- Ask for clarification on vague queries
+- Use structured formatting (lists, bold) sparingly
+- Maximum response length: 200 words typical
+
+### 6.3 AURA Integration
+
+**FR-6.3.1: LLM API Integration**
+- Integrate with Anthropic API (Claude) or OpenAI API
+- Send system instructions with user context
+- Include conversation history for multi-turn dialogs
+- Set temperature and max tokens for consistent responses
+- Handle API errors gracefully with fallback messages
+
+**FR-6.3.2: Rate Limiting & Abuse Prevention**
+- Limit messages per user per hour (e.g., 50 messages/hour)
+- Block spam or abusive content
+- Implement cooldown between rapid messages
+- Log all conversations for review (privacy compliant)
+
+---
+
+## 7. BROWSER EXTENSION (HUD WIDGET)
+
+### 7.1 Extension Architecture
+
+**FR-7.1.1: Extension Structure**
+- Manifest V3 compatible (Chrome, Firefox, Edge)
+- Background service worker for persistent state
+- Content script injection for page monitoring
+- Popup UI (React) for settings
+- Options page for configuration
+
+**FR-7.1.2: Permissions**
+- activeTab: Access current tab URL
+- storage: Save user preferences and state
+- notifications: Browser notifications
+- Host permissions for verified domains
+
+### 7.2 Active Quest Tracker
+
+**FR-7.2.1: Quest Overlay**
+- Floating overlay in bottom-right corner
+- Display current quest step (e.g., "Step 2: Go to Uniswap")
+- Minimize/expand toggle
+- Show quest progress (current step / total steps)
+- Click to open full quest details
+
+**FR-7.2.2: Synchronization**
+- Sync with Quest Hub backend via API
+- Poll for active quest updates every 30 seconds
+- Update display when quest changes
+- Persist state across browser restarts
+
+### 7.3 Verification Helper
+
+**FR-7.3.1: Domain Detection**
+- Maintain whitelist of approved platform domains
+- Detect when user navigates to whitelisted domain
+- Display green confirmation: "Verification Signal: Correct Platform"
+- Show which quest this relates to
+- HUD illuminates bright green on correct domain
+
+**FR-7.3.2: Wallet Connection Detection**
+- Monitor for wallet connection events (MetaMask, Coinbase Wallet)
+- Confirm connected address matches Quest Hub profile
+- Display wallet status in HUD
+- Alert if wrong wallet connected
+
+### 7.4 Security Watch
+
+**FR-7.4.1: Phishing Detection**
+- Check URLs against known phishing list
+- Fuzzy match for lookalike domains (e.g., "uniswwap.org")
+- Flash amber warning if suspicious domain detected
+- Display: "Security Alert: Unverified Domain! Do not connect wallet."
+- Provide link to report phishing
+
+**FR-7.4.2: Transaction Monitoring**
+- Monitor wallet signature requests (read-only)
+- Flag excessive token approvals (infinite or >$1000 value)
+- Warn about suspicious contract interactions
+- Display: "Warning: High Clearance Request. Review spending limit."
+- Provide explanation of what user is signing
+
+### 7.5 Instant Verification
+
+**FR-7.5.1: Blockchain Polling**
+- Poll blockchain for new transactions every 30 seconds
+- Check user's wallet address for relevant transactions
+- Match transaction to active quest requirements
+- Use Alchemy/Etherscan APIs for real-time data
+
+**FR-7.5.2: Completion Notification**
+- Detect quest completion based on transaction
+- Trigger browser notification: "Quest Complete! +250 XP"
+- Play success sound (if enabled)
+- Display badge icon animation
+- Provide deep link back to Quest Hub
+- Update Quest Hub backend immediately
+
+### 7.6 Extension Settings
+
+**FR-7.6.1: User Preferences**
+- Enable/disable notifications
+- Enable/disable sounds
+- Enable/disable security warnings
+- Whitelist custom domains (advanced users)
+- Sync settings with Quest Hub account
+
+---
+
+## 8. SOCIAL & COMMUNITY FEATURES
+
+### 8.1 Social Feed
+
+**FR-8.1.1: Activity Feed**
+- Display recent achievements from friends/connections
+- Format: "@username just earned the 'Portal Key Holder' badge!"
+- Auto-scroll or manual scroll
+- Click to view friend's profile
+- Update in real-time (WebSocket or polling every 10 seconds)
+
+**FR-8.1.2: Friend System**
+- Add friends by username
+- Accept/decline friend requests
+- View friends list
+- Unfriend action
+- Friend count display on profile
+
+**FR-8.1.3: Social Actions**
+- Share badge achievement to Twitter/X
+- Share level up to social media
+- Invite friends via referral link
+- Send congratulations message on friend's achievement
+
+### 8.2 Referral System
+
+**FR-8.2.1: Referral Mechanics**
+- Generate unique referral link per user
+- Track signups via referral link
+- Award bonus XP to both referrer and referee
+- Milestone rewards for multiple referrals (5, 10, 25)
+- Display referral stats on profile
+
+---
+
+## 9. ADMIN & MODERATION
+
+### 9.1 Admin Dashboard
+
+**FR-9.1.1: User Management**
+- View all users with search/filter
+- View user details: level, XP, quests completed, wallet address
+- Manual XP adjustment (with audit log)
+- Ban/suspend users
+- Reset user progress (with confirmation)
+
+**FR-9.1.2: Quest Management**
+- Create/edit/delete quests
+- Update quest parameters without code deployment
+- Preview quest before publishing
+- Enable/disable quests
+- View quest completion statistics
+
+**FR-9.1.3: Manual Verification Queue**
+- View pending manual verifications
+- Display proof images with quest context
+- Approve/reject with reason
+- Notify user of decision
+- Track reviewer actions
+
+**FR-9.1.4: Analytics Dashboard**
+- View platform metrics: total users, DAU, WAU, MAU
+- Quest completion rates per quest
+- Average time to complete per quest
+- Drop-off points identification
+- Revenue metrics (when monetization launches)
+
+### 9.2 Moderation Tools
+
+**FR-9.2.1: Content Moderation**
+- Flag inappropriate usernames
+- Review user-generated content (if UGC features added)
+- Ban users for TOS violations
+- Audit log of all moderation actions
+
+---
+
+## 10. TECHNICAL INFRASTRUCTURE
+
+### 10.1 Backend Architecture
+
+**FR-10.1.1: API Endpoints**
+- RESTful API design with clear resource structure
+- Authentication middleware on protected routes
+- Rate limiting per endpoint
+- Input validation and sanitization
+- Error handling with meaningful error codes
+- API documentation (OpenAPI/Swagger)
+
+**FR-10.1.2: Database Requirements**
+- PostgreSQL database (via Supabase or self-hosted)
+- Row-level security policies
+- Database indexes on foreign keys and frequently queried fields
+- Backup strategy (daily automated backups)
+- Connection pooling for performance
+
+**FR-10.1.3: Caching Strategy**
+- Cache frequently accessed data (quests, expeditions, achievements)
+- Cache user profiles for 5 minutes
+- Invalidate cache on data updates
+- Use Redis for session storage and real-time features
+
+### 10.2 External Integrations
+
+**FR-10.2.1: Blockchain APIs**
+- Alchemy SDK integration (NFT API, enhanced queries)
+- Etherscan/Basescan API (transaction history, balance checks)
+- The Graph (Uniswap, protocol-specific data)
+- ENS SDK (name resolution)
+- Support for multiple chains: Ethereum, Base, Optimism, Arbitrum
+
+**FR-10.2.2: Social APIs**
+- Farcaster API (profile verification)
+- Discord API (role verification via Collab.Land)
+- Twitter API (share functionality)
+
+**FR-10.2.3: Payment Integration (Future)**
+- Stripe for fiat payments
+- Coinbase Commerce for crypto payments
+- Subscription management
+- Invoice generation
+
+### 10.3 Security
+
+**FR-10.3.1: Application Security**
+- HTTPS only (enforce SSL)
+- Security headers: CSP, HSTS, X-Frame-Options
+- Input validation and sanitization
+- SQL injection prevention (parameterized queries)
+- XSS protection
+- CSRF protection
+- Rate limiting on all public endpoints
+
+**FR-10.3.2: Authentication Security**
+- Secure password hashing (bcrypt, Argon2)
+- JWT token-based authentication
+- Token refresh mechanism
+- Session expiration and renewal
+- Account lockout after failed login attempts
+
+**FR-10.3.3: Data Privacy**
+- GDPR compliance (for EU users)
+- Privacy policy and terms of service
+- User data export functionality
+- User data deletion (right to be forgotten)
+- No storage of seed phrases or private keys
+- Wallet addresses stored with user consent
+
+### 10.4 Performance
+
+**FR-10.4.1: Frontend Performance**
+- Code splitting and lazy loading
+- Image optimization (WebP, lazy loading)
+- Minimize bundle size
+- CDN for static assets
+- Service worker for offline functionality (optional)
+
+**FR-10.4.2: API Performance**
+- Query optimization (avoid N+1 queries)
+- Database indexes on frequently accessed fields
+- Response caching where appropriate
+- Pagination for large datasets
+- Async processing for verification checks
+
+**FR-10.4.3: Monitoring**
+- Error tracking (Sentry)
+- Performance monitoring (Vercel Analytics, Google Analytics)
+- API response time tracking
+- Database query performance monitoring
+- Uptime monitoring
+
+---
+
+## 11. ACCESSIBILITY & USABILITY
+
+### 11.1 Accessibility Standards
+
+**FR-11.1.1: WCAG 2.1 AA Compliance**
+- Minimum contrast ratio 4.5:1 for normal text
+- Minimum contrast ratio 3:1 for large text
+- Color not used as sole means of conveying information
+- All functionality available via keyboard
+- Focus indicators visible on all interactive elements
+
+**FR-11.1.2: Keyboard Navigation**
+- Logical tab order through interactive elements
+- Escape key closes modals
+- Arrow keys for navigation in lists/grids (optional)
+- Enter/Space activates buttons and links
+- Skip navigation links for screen readers
+
+**FR-11.1.3: Screen Reader Support**
+- Semantic HTML structure (header, nav, main, aside, footer)
+- ARIA labels for icon-only buttons
+- ARIA live regions for dynamic content updates
+- Alt text for all meaningful images
+- Proper heading hierarchy (H1, H2, H3)
+
+### 11.2 Error Handling & User Guidance
+
+**FR-11.2.1: Error Messages**
+- Clear, actionable error messages
+- Avoid technical jargon in user-facing errors
+- Provide troubleshooting guidance
+- Link to relevant help resources

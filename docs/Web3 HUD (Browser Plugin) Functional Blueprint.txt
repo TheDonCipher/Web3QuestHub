@@ -1,0 +1,56 @@
+﻿Web3 HUD (Browser Plugin) Functional Blueprint
+
+
+The browser plugin will be a lightweight, non-intrusive extension that runs in the background. It only becomes visually active when the user navigates to an external site related to their active mission or when a security event is detected.
+
+
+1. Core Synchronization and Tracking
+
+
+The HUD's primary function is to maintain context, even when the user is not looking at the Quest Hub website.
+Feature
+	Mechanism & Synchronization
+	Educational/Quest Benefit
+	Active Mission State
+	The Quest Hub website sends the user's active_mission_id and active_step_number to the HUD via Extension Messaging APIs upon starting or resuming a quest.
+	Ensures the HUD knows exactly what the user is trying to accomplish at all times.
+	Wallet Address Sync
+	The website sends the user's connected walletAddress to the HUD.
+	This address is used locally by the HUD to check against external transaction sites and display verification status.
+	Step Reminder Overlay
+	The HUD displays a small, discreet floating banner in the browser corner showing the current step (e.g., "Active: Step 3 - Confirm the transaction in MetaMask").
+	Prevents the user from getting lost or forgetting what they were supposed to do when they switch tabs.
+	
+
+2. Contextual Security and Safety Features
+
+
+This is the most critical function, using the Verified Domain Whitelist (from the Project Plan) to act as a real-time security guard.
+Feature
+	Trigger and UI Behavior
+	Educational/Quest Benefit
+	Destination Confirmation
+	When the user clicks an external link in a Mission Brief and lands on a whitelisted domain (e.g., app.uniswap.org), the HUD briefly flashes green and displays a message: "Destination Verified: You are on the secure Uniswap terminal."
+	Builds user confidence and trains them to recognize and trust official, safe domains.
+	Phishing Alert
+	If the user manually navigates to a URL not on the whitelist (e.g., a common typo like uniswwap.org), the HUD immediately flashes red and displays a prominent warning: "Security Alert: Unverified Domain! Do NOT connect your wallet here."
+	Protects the beginner from the most common form of crypto attack (phishing) and teaches vigilance.
+	Transaction Monitoring
+	The HUD monitors user interactions with their wallet extension (like MetaMask). If the user initiates a transaction on a potentially risky contract or attempts to approve unlimited token spending (a common security risk), the HUD displays a Yellow Caution warning.
+	Promotes healthy skepticism regarding transaction details and teaches them to check permissions before approving.
+	
+
+3. Verification and Feedback Loop
+
+
+The HUD accelerates the gamified feedback loop by providing instant status updates outside of the main Quest Hub tab.
+Feature
+	Trigger and Data Source
+	Educational/Quest Benefit
+	Instant Completion Toast
+	Once the user completes the action (e.g., confirms the swap), the HUD monitors local transaction history. The moment the required transaction is confirmed on-chain, the HUD displays a prominent, celebratory "MISSION SUCCESS!" toast, even if the user is still on the external site.
+	Provides immediate, positive reinforcement, linking their real-world action to the quest outcome instantly.
+	Verification Shortcut
+	A button or link in the HUD that says "Return to Quest Hub for Verification" remains active. Clicking this takes them directly back to the Mission Brief modal on the website, automatically triggering the final On-Chain Verification Service check.
+	Streamlines the process; the user doesn't have to navigate back manually, reducing friction.
+	The Web3 HUD transforms the educational material from a passive guide into an active co-pilot, increasing both safety and engagement during the crucial moments when the user is interacting with live blockchain applications.

@@ -1,0 +1,120 @@
+﻿On-Chain Verification Service: Technical Blueprint
+
+
+This service needs to be robust, secure, and flexible enough to handle various types of blockchain checks—from simple balance inquiries to complex smart contract event lookups.
+
+
+1. Service Architecture and Data Flow
+
+
+The verification process is triggered when the user clicks "Scan Blockchain & Verify Portal" in the Mission Brief modal.
+1. Trigger: Frontend sends missionId and userId to the Verification Service.
+2. Lookup: The Service reads the user's walletAddress from the user_profile in Firestore and fetches the verificationData blueprint from the mission_catalog.
+3. API Check: The Service executes one or more queries against the appropriate external Web3 API (e.g., Alchemy/Etherscan) based on the verificationData.
+4. Logic Check: The results are evaluated against the mission's target_logic.
+5. Update: If successful, the Service securely updates the user's missionStatus in Firestore to 'completed' and increments their totalXP and explorerLevel.
+6. Response: The frontend receives a success/failure status to display the final confirmation toast.
+________________
+
+
+2. Core Verification Types and Logic Mapping
+
+
+The service must support several distinct methods for verifying on-chain activity. This mapping ensures flexibility for future quests.
+
+
+A. Balance Check (Type: balance_check)
+
+
+Used for quests like "Procuring Test Fuel" or "First Gold Acquisition."
+Parameter
+	Type
+	Logic Description
+	Example Value (for "First Gold Acquisition")
+	targetChainId
+	string
+	The network to query (e.g., Mainnet, Testnet).
+	'1'
+	targetCurrency
+	string
+	The token symbol or address being checked.
+	'ETH'
+	minAmount
+	number
+	The minimum required balance (in decimal units).
+	0.005
+	Logic:
+	Check the user's balance on the targetChainId for the targetCurrency. If the balance is    minAmount, verification passes.
+	
+
+	
+
+	
+
+B. Transaction History Check (Type: tx_history_check)
+
+
+Used for quests like "The Ledger Log" or simply ensuring the wallet has been used.
+Parameter
+	Type
+	Logic Description
+	Example Value (for "The Ledger Log")
+	targetChainId
+	string
+	The network to query.
+	'1'
+	checkWindow
+	number
+	Check only transactions within the last N days.
+	30
+	Logic:
+	Query the last checkWindow days of transactions for the user's address on the specified chain. If any confirmed transaction (either sent or received) is found, verification passes.
+	
+
+	
+
+	
+
+C. Smart Contract Interaction Check (Type: event_check or swap_check)
+
+
+Used for advanced quests like "The Simple Swap" (Uniswap) or "Minting a Free Pass." This is the most complex check.
+Parameter
+	Type
+	Logic Description
+	Example Value (for "The Simple Swap")
+	targetChainId
+	string
+	The network where the swap must occur (e.g., L2 like Arbitrum).
+	'42161' (Arbitrum)
+	contractAddress
+	string
+	The address of the DEX router/minting contract.
+	'0x7a2...4c' (Uniswap Router)
+	functionSignature
+	string
+	The specific function or event (e.g., for a swap).
+	'swapExactTokensForETH' or equivalent event hash.
+	minAmountIn
+	number
+	Minimum amount swapped to prevent spamming.
+	1.0 (in USDC units)
+	Logic:
+	Query the transaction history for the user's address for calls to the contractAddress containing the functionSignature. If a successful transaction is confirmed that meets the minimum input amount, verification passes.
+	
+
+	
+
+	________________
+
+
+3. Firestore XP Update and Level Calculation
+
+
+Upon successful verification, the service must execute the following atomic updates to the user's Firestore document:
+1. Mission Status Update: Set the specific missionStatus.missionId.status to 'completed' and add the completedAt timestamp.
+2. XP Update: Increment totalXP by the xpReward value defined in the mission_catalog.
+3. Level Check: Run a check against the XP Table (a separate static lookup table) to determine if the new totalXP crosses a level threshold.
+   * Example: If current Level 3 requires 2,500 XP, and the user's new XP is 2,700, the service must update explorerLevel to 4.
+4. Badge Award: Add the badgeId to the user's badgesEarned array.
+By structuring the service with clear verification types and strict logic mapping, the development team can quickly and reliably implement the core functionality of the Quest Hub.

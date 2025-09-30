@@ -1,0 +1,62 @@
+﻿Explorer Level Progression (The XP Table)
+
+
+This table defines the cumulative XP required to achieve each Explorer Level and specifies the major feature unlocks that reward the user for their progress. This structure will be accessed by the On-Chain Verification Service to determine level-ups after a mission is completed.
+Explorer Level
+	Cumulative XP Required
+	XP Required to Reach Next Level (Delta)
+	Major Unlock/Milestone
+	1 (Newbie)
+	0 XP
+	500 XP
+	Initial Access: Unlocks Expedition 1: Digital Frontier
+	2 (Cadet)
+	500 XP
+	750 XP
+	Interface Upgrade: Unlocks Logbook history view in Console.
+	3 (Apprentice)
+	1,250 XP
+	1,000 XP
+	Safety First: Unlocks AURA Security Health Check feature.
+	4 (Wanderer)
+	2,250 XP
+	1,250 XP
+	Access: Unlocks Expedition 2: Trading Outpost (DeFi & Commerce)
+	5 (Trader)
+	3,500 XP
+	1,500 XP
+	Insight: Unlocks Leaderboard and basic filtering options.
+	6 (Collector)
+	5,000 XP
+	1,750 XP
+	Access: Unlocks Expedition 3: Artifact Quarter (NFTs & Culture)
+	7 (Guardian)
+	6,750 XP
+	2,000 XP
+	Profile: Unlocks Custom Profile Tag (changing @Cypher_Newbie to a custom name).
+	8 (Architect)
+	8,750 XP
+	2,250 XP
+	Tools: Unlocks Advanced Wallet Analysis Tools in the Console.
+	9 (Veteran)
+	11,000 XP
+	2,500 XP
+	Customization: Unlocks Dashboard Theme Selector (Light/Dark mode control).
+	10 (Frontier Citizen)
+	13,500 XP
+	N/A
+	Mastery: Unlocks High Security Zone (Advanced DeFi/DAO Governance Quests)
+	
+
+Integration Logic for the Verification Service
+
+
+When the On-Chain Verification Service successfully confirms a mission and calculates the new totalXP, it follows this logic:
+1. Read: Fetch the user's current explorerLevel (e.g., 3) and totalXP (e.g., 1,800).
+2. Compare: Loop through the XP Table, starting from the user's current level, until the new totalXP exceeds the Cumulative XP Required for the next level.
+   * Example: User at 1,800 XP completes a 500 XP mission, bringing total to 2,300 XP. This exceeds the Level 4 requirement of 2,250 XP.
+3. Update: Update the user's Firestore document:
+   * Set explorerLevel to 4.
+   * Trigger a frontend Level Up Animation/Notification to celebrate the unlock.
+4. Access Control: The frontend relies on this explorerLevel to dynamically enable access to locked expeditions and features like the Leaderboard.
+This table provides the developer with all the necessary constants to manage user progression and feature gating.

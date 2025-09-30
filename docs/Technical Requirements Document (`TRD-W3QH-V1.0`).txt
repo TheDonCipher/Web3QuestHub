@@ -1,0 +1,189 @@
+# Web3 Quest Hub: Technical Requirements Document
+
+| Document ID | TRD-W3QH-V1.0 |
+| :--- | :--- |
+| Date | 2025-09-30 |
+| Status | Final |
+| Author | Lead Technical Analyst |
+
+---
+
+### 1. Introduction
+
+#### 1.1. Purpose
+This document provides the official technical requirements for the design, development, and implementation of the Web3 Quest Hub platform. It is the primary guide for the development team and serves as the authoritative source for all functional and non-functional specifications.
+
+#### 1.2. Project Vision
+The Web3 Quest Hub is a gamified educational platform designed to build confidence and competence in crypto-curious beginners. The platform's vision is to demystify Web3 by guiding users through a series of secure, low-risk, real-world interactions. The core experience transforms the intimidating process of entering the Web3 space into an immersive, secure, and rewarding exploration, effectively onboarding the next generation of users.
+
+### 2. Technology Stack
+
+The following technology stack is mandatory for the project. No deviations are permitted without a formal change request and approval.
+
+| Component | Technology | Version/Details |
+| :--- | :--- | :--- |
+| Frontend Web Application | Next.js | Latest stable release (React 18+) |
+| Backend Services | Firebase Functions | Node.js environment |
+| Database | Google Firestore | In Native Mode |
+| Authentication | Firebase Authentication | Email/Password & Google OAuth |
+| AI Companion | Google Gemini API | Latest stable model |
+| On-Chain Data Provider | Web3 API Service | e.g., Alchemy, Infura |
+
+### 3. General System Requirements
+
+#### 3.1. Authentication
+- User Registration & Login: The system must implement user authentication using Firebase Authentication.
+- Providers: Support for Email/Password and social login via Google is required. The authentication flow must be seamless and secure.
+- Session Management: Firebase's built-in session management will be used to maintain user login state across the web application.
+
+#### 3.2. User Profiles
+- Data Persistence: Each registered user must have a corresponding document in a `user_profile` collection within Firestore.
+- Data Schema: The user profile document must, at a minimum, store the following information:
+
+```json
+{
+  "userId": "firebase-auth-uid",
+  "displayName": "Explorer123",
+  "email": "user@email.com",
+  "walletAddress": "0x...",
+  "totalXP": 8750,
+  "explorerLevel": 8,
+  "badgesEarned": ["badgeId_01", "badgeId_02"],
+  "logbookEntries": [
+    { "missionId": "mission_01", "completedAt": "timestamp" }
+  ],
+  "createdAt": "timestamp"
+}
+```
+
+### 4. Functional Requirements by Component
+
+This section details the specific functional requirements for each major component of the platform ecosystem.
+
+#### A. Web3 Quest Hub Website (Next.js Application)
+
+- Explorer Dashboard:
+    - Must feature a responsive layout with a sticky header for primary navigation and a persistent sidebar displaying user level, XP progress, and wallet connection status.
+    - The main content area will be a Quest Grid of interactive cards, representing available missions.
+
+- Star Map Quest View:
+    - The Quest Grid must be visually rendered as an interactive star map.
+    - "Expeditions" shall be grouped as constellations.
+    - "Missions" shall be represented as stars.
+    - Visual "Pathways" must connect sequential missions, guiding the user's learning journey.
+
+- Avatar Console (User Profile Page):
+    - Must display user progression data fetched from their Firestore profile.
+    - A central "XP Core" visualization (e.g., a large circular progress chart) must show current XP and progress toward the next level.
+    - An "Artifact Inventory" section must display all earned badges.
+    - A "Logbook" section must render a chronological, filterable feed of all completed missions and achievements.
+
+- Mission Brief Modal:
+    - A modal must be triggered upon selecting a mission.
+    - It must dynamically display the mission's `lore`, `prerequisites`, `xpReward`, `badgeReward`, and a detailed, step-by-step Action Plan.
+    - All links to external dApps or websites must be clearly marked as "Portals" and open in a new tab.
+
+- Gamification System:
+    - The frontend must provide an interface (e.g., a "Verify Completion" button) to trigger the On-Chain Verification Service.
+    - Upon receiving a successful verification response, the UI must immediately update to reflect the user's new `totalXP` and, if applicable, their new `explorerLevel`.
+    - Level-up events must trigger a celebratory UI animation or modal.
+    - The system must use the Explorer Level Progression Table as the single source of truth for level thresholds.
+
+| Level | Title | Cumulative XP Required |
+| :--- | :--- | :--- |
+| 1 | Newbie | 0 |
+| 2 | Cadet | 500 |
+| 3 | Apprentice | 1,250 |
+| 4 | Wanderer | 2,250 |
+| 5 | Trader | 3,500 |
+| 6 | Collector | 5,000 |
+| 7 | Guardian | 6,750 |
+| 8 | Architect | 8,750 |
+| 9 | Veteran | 11,000 |
+| 10 | Frontier Citizen | 13,500 |
+
+#### B. AURA AI Companion (Gemini API Integration)
+
+- Contextual Intelligence:
+    - All prompts to the Gemini API must be enriched with the user's current context.
+    - This context shall include `currentMissionId`, `currentStep`, `userLevel`, and relevant on-chain data summaries (e.g., recent transaction status).
+
+- Persona & Tone Adherence:
+    - Prompts must include system instructions to enforce the AURA persona: *expert, enthusiastic, friendly, and relentlessly security-focused*.
+    - The AI's language must be encouraging and avoid overly technical jargon unless providing an explicit explanation.
+
+- Safety Guardrails (Strict Implementation):
+    1.  The AI must never ask for, prompt for, or offer to handle private keys, seed phrases, or any other user secrets.
+    2.  All responses discussing transactions or contract interactions must include a standardized, clearly visible warning about inherent risks.
+    3.  The AI must not provide financial advice, price predictions, or specific token endorsements.
+    4.  It must be trained to recognize and politely refuse requests that violate these safety protocols.
+
+- Response Protocols:
+    - The backend service managing the AURA integration must implement specific logic to handle predefined query types.
+    - *Example*: A user query containing "is this safe?" should trigger a "Security Check" protocol, where AURA cross-references the target contract/domain against a known-good list before formulating a response.
+
+#### C. Web3 HUD Browser Plugin
+
+- Mission Tracking Display:
+    - The plugin's UI must remain synchronized with the user's state in the main web application.
+    - It must clearly display the title of the current mission and the description of the active step.
+    - Communication between the Next.js app and the plugin will be handled via browser extension messaging APIs (e.g., `browser.runtime.sendMessage`).
+
+- Contextual Security Alerts:
+    - The plugin must actively monitor tab navigation events.
+    - It will maintain a mission-specific domain whitelist, provided by the Quest Hub web app.
+    - Warning State: If the user navigates to a domain *not* on the whitelist, the plugin must display a prominent, non-intrusive warning (e.g., a flashing red border or icon).
+    - Verified State: If the user navigates to a whitelisted domain (e.g., `app.uniswap.org`), the plugin must display a clear confirmation (e.g., a green checkmark icon).
+
+- Transaction Monitoring:
+    - The plugin must inject a content script to monitor interactions with the user's wallet (e.g., `window.ethereum`).
+    - It must intercept transaction requests (`eth_sendTransaction`, `eth_signTypedData_v4`) to perform pre-flight checks.
+    - It must detect and warn the user about common risks, such as unlimited token approvals (`setApprovalForAll`) or interactions with unverified smart contracts.
+
+- Instant Verification Feedback:
+    - The plugin must listen for confirmation events from the On-Chain Verification Service (relayed via the web app).
+    - Upon successful verification of an on-chain action, the HUD must display a success toast notification (e.g., "Swap Verified! +150 XP").
+
+#### D. On-Chain Verification Service (Firebase Functions)
+
+- Modular Architecture:
+    - The service shall be architected as a collection of individual, triggerable Firebase Functions.
+    - A primary HTTP-triggered function (e.g., `verifyMissionCompletion`) will serve as the main entry point.
+
+- Dynamic Verification Logic:
+    - The function will read mission completion criteria from the `mission_catalog` Firestore collection based on the provided `missionId`.
+    - It must support multiple verification types by calling the specified Web3 API provider:
+        - `balance_check`: Verify the user's wallet holds a minimum quantity of a token.
+        - `tx_history_check`: Verify a transaction with specific parameters (to/from address) has occurred.
+        - `event_check`: Verify that a specific event has been emitted by a smart contract for the user's address.
+
+- Atomic Firestore Updates:
+    - Upon successful on-chain verification, the service must perform a transactional write to the user's document in the `user_profile` collection.
+    - This transaction must atomically:
+        1.  Increment the `totalXP` field.
+        2.  Compare the new `totalXP` against the progression table and update `explorerLevel` if a new level is reached.
+        3.  Add the corresponding `badgeId` to the `badgesEarned` array.
+    - The service must also update the user's `missionStatus` for that mission to `completed`.
+
+### 5. Non-Functional Requirements
+
+- Security:
+    - Data Encryption: All data stored in Firestore must be encrypted at rest. All data transmitted between the client and Firebase services must be encrypted in transit (HTTPS/TLS).
+    - API Key Management: All third-party API keys (Google Gemini, Web3 provider) must be stored securely using Google Secret Manager or Firebase Functions environment variables. They must not be exposed on the client-side.
+    - Principle of Least Privilege: Firebase Security Rules must be implemented to ensure users can only read/write their own data.
+
+- Performance:
+    - Web Application: The Next.js application must be optimized for fast load times. Target a Largest Contentful Paint (LCP) of under 2.5 seconds. Utilize server-side rendering (SSR) or static site generation (SSG) where appropriate.
+    - Backend Services: Firebase Functions must be optimized for response time. For critical, user-facing functions, configure a minimum number of instances to reduce cold-start latency.
+
+- Scalability:
+    - The architecture must be designed to support a growing user base without degradation in performance.
+    - Firestore queries must be efficient and backed by appropriate composite indexes to ensure scalability.
+
+- Usability:
+    - The UI/UX must be highly intuitive and accessible to users with no prior Web3 experience.
+    - The design language must balance the immersive "Holographic Command Center" aesthetic with the clarity of a "Clean, Modern Dashboard," ensuring that functionality is never sacrificed for theme.
+
+- Responsiveness:
+    - All web-based components, including the Quest Hub website and its various views, must be fully responsive.
+    - The user experience must be seamless and functional across all target devices: desktop, tablet, and mobile.

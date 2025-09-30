@@ -1,0 +1,103 @@
+﻿The Web3 Quest Hub: Metaverse Expedition Log
+Target User: Crypto-Curious Beginner
+Overall Theme: Exploring the Web3 Metaverse (A Digital Frontier)
+Goal: Build user confidence through low-risk, high-utility, and gamified real-world Web3 interactions.
+🌎 Expedition 1: The Digital Frontier
+(Focus: Onboarding, Wallet Security, and Establishing Identity)
+This first chapter guides the user through the essential steps of setting up their digital self, securing their private assets, and learning to navigate the core tools of the Web3 Metaverse.
+Quest Title
+	Metaverse Action
+	Reward
+	Achievement/Badge
+	Difficulty
+	Verification Method
+	Portal Activation
+	Create Your First Wallet. Secure your private "Portal Key" (Seed Phrase) and submit your public address for verification.
+	+100 XP
+	"Portal Key Holder"
+	⭐ Beginner
+	API Check: Verify valid Ethereum address submitted.
+	The MetaMask Module
+	Install and configure the MetaMask interface. It's your Heads-Up Display for interacting with the world.
+	+150 XP
+	"HUD Ready"
+	⭐ Beginner
+	Quiz: Answer 3 quick questions about the MetaMask interface layout.
+	Procuring Test Fuel
+	Visit the Testnet Refueling Station (Faucet, e.g., Base Sepolia) and procure some no-value Test-ETH. This is free fuel for practice drives.
+	+50 XP
+	"Refueler"
+	⭐ Beginner
+	Balance Check: Verify Test-ETH balance   .
+	Your Digital Tag (ENS)
+	Claim your permanent, human-readable Digital Tag (ENS name) for your wallet address.
+	+400 XP
+	"Frontier Citizen"
+	⭐ Intermediate
+	API Check: Verify ownership of a registered ENS name linked to the user's wallet.
+	💰 Expedition 2: The Trading Outpost
+(Focus: First Financial Interactions, Decentralized Commerce, and Low-Fee Networks)
+The user is now equipped to safely acquire and exchange digital assets. This mission focuses on low-risk financial steps using small dollar amounts and low-fee networks.
+Quest Title
+	Metaverse Action
+	Reward
+	Achievement/Badge
+	Difficulty
+	Verification Method
+	The Fiat Bridge
+	Connect a Fiat On-Ramp (like Coinbase/MoonPay) to your Hub Profile. This is the Gateway to Digital Gold.
+	+150 XP
+	"Bridge Operator"
+	⭐ Beginner
+	Manual Review: User clicks "I connected my on-ramp" and passes a quiz on safe on-ramping.
+	First Gold Acquisition
+	Purchase a small amount of Mainnet ETH (e.g., $10). You now have currency for the Outpost!
+	+200 XP
+	"Digital Gold Prospector"
+	⭐ Beginner
+	Balance Check: Verify Mainnet ETH balance    ETH.
+	The Simple Swap
+	Use the Uniswap Exchange Terminal to trade your ETH for a stable currency like USDC. Learn to swap one asset for another.
+	+250 XP
+	"Outpost Trader"
+	⭐ Intermediate
+	Transaction Check: Uniswap Subgraph detects a swap transaction from user's wallet.
+	Gas Fee Awareness
+	Perform a small swap on a Layer 2 Network (e.g., Optimism or Base) to experience the speed of the Hyperloop and low fees.
+	+300 XP
+	"Hyperloop Commuter"
+	⭐ Intermediate
+	Transaction Check: Block explorer API detects a transaction on the specified L2 network.
+	🎨 Expedition 3: The Artifact Quarter
+(Focus: Digital Ownership, Social Connection, and Community Engagement)
+The final mission introduces the cultural and social side of the Metaverse: unique collectibles (NFTs), on-chain identity, and DAO participation.
+Quest Title
+	Metaverse Action
+	Reward
+	Achievement/Badge
+	Difficulty
+	Verification Method
+	The Gallery Crawl
+	Navigate the OpenSea Artifact Market. Browse three different collections—it's like visiting three art exhibits. (No purchase required!)
+	+100 XP
+	"Artifact Tourist"
+	⭐ Beginner
+	Manual Review: User clicks "I completed the gallery crawl" and passes a quick question about NFT utility.
+	Minting a Free Pass
+	Mint a free NFT ("Community Pass") on a platform like Zora or a similar curated free-mint platform.
+	+300 XP
+	"Digital Collector"
+	⭐ Intermediate
+	API Check: OpenSea/Alchemy API verifies user wallet owns a specific NFT collection ID.
+	Social Profile Setup
+	Establish your Decentralized Social Identity on a platform like Farcaster (Warpcast). Your profile persists on-chain.
+	+300 XP
+	"Metaverse Citizen"
+	⭐ Intermediate
+	API Check: Farcaster API verifies a profile handle exists for the user's wallet.
+	Joining the DAO Council
+	Join the Discord or Telegram of a major project and use a tool like Collab.Land to verify your wallet for a special role.
+	+200 XP
+	"Council Member"
+	⭐ Intermediate
+	API Check: Discord/Collab.Land API checks for a specific role or verification status associated with the user's ID.

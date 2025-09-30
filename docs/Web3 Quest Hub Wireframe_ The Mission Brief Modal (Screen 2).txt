@@ -1,0 +1,57 @@
+﻿Web3 Quest Hub Wireframe: The Mission Brief Modal (Screen 2)
+The Mission Brief appears as a large, central, responsive modal overlaying the main dashboard when a Mission Card is clicked. Its primary goal is to guide the user from the "what" (the quest) to the "how" (the steps) in a clean, non-intimidating format.
+1. Modal Structure and Header
+* Aesthetic: High-contrast modal (e.g., light content on a dark backdrop, or vice versa, with a blurred background overlay to keep focus). Rounded corners, subtle drop shadow.
+* Header:
+   *   (Top Right - Standard 'X' icon).
+   *   (Top Left - 'Back to Digital Frontier').
+   * Title: Portal Activation (Large, clear H1).
+   * Metadata Row: A horizontal row displaying key data points:
+   * Platform: MetaMask | Difficulty: ⭐ Beginner | Time Estimate: 5 min
+   * Reward: +100 XP | Badge: Portal Key Holder
+2. Content Sections (Two-Column Layout on Desktop)
+The body of the modal is organized into three distinct, easily digestible sections to prevent the beginner from feeling overwhelmed.
+A. Summary & Rewards (Left Column / Top on Mobile)
+This section validates the user's choice and motivates them.
+   * Quest Lore/Brief: A concise, single-paragraph explanation of why this mission matters in Web3 terms (e.g., "The Portal Key secures your entire digital future. This step is about sovereignty.")
+   * Prerequisites/Requirements Check: A checklist that dynamically verifies readiness.
+   * List of requirements (e.g., "Web Browser Installed," "Pen and Paper Ready").
+   * Each item shows a  
+(Green if ready, Gray if pending).
+      * Reward Preview Card: A visually attractive card summarizing the unlocks:
+      * +100 XP
+      * Badge: Portal Key Holder (Visual badge icon).
+      * Next Unlock: Mentions the next quest (e.g., "Unlocks: The MetaMask Module").
+B. The Action Plan (Right Column / Below Summary on Mobile)
+This is the core instructional section, focused purely on clear, numbered steps.
+      * Title: Your Step-by-Step Action Plan (Clear H2).
+      * Step-by-Step List:
+      * Each step is numbered and concise, avoiding jargon.
+      * Step 1: Download & Install. Action: Open the official link for the MetaMask extension.  
+      * Step 2: Create a Wallet. Action: Click 'Create a New Wallet' and set a strong local password.
+      * Step 3: Secure Your Key (CRITICAL). Action: Write down your Secret Recovery Phrase offline. Do not photograph or store digitally.
+      * Step 4: Verification. Action: Copy your public wallet address (starts with 0x...).  
+         * Verification Callout: A dedicated, highlighted box at the end of the steps.
+         * Title: Mission Goal: Submit Address
+         * Description: Paste the public address you just created into the field below to verify activation.
+         * Input Field: [0x... Public Wallet Address]
+         * Action Button: $$ Scan Blockchain & Verify Portal $$ (Prominent Blue Button).
+3. Integrated Assistance and Safety
+This ensures help is immediately available without forcing the user to leave the modal.
+         * AURA Contextual Guidance: A small dedicated panel below the Action Plan.
+         * Title: AURA's Tip for this Step
+         * Content: A dynamic tip related to the most common failure point (e.g., "Remember, your Secret Recovery Phrase is your master key. If you lose it, no one can recover your funds.")
+         * $$ Chat with AURA $$ (Link that opens the full AURA chat widget with the Mission Brief context loaded).
+         * Video/Guide Resources:
+         * $$ Watch 60-Second Video Tutorial $$ (Embedded or link to a clean tutorial).
+         * $$ View Full Security Deep Dive $$ (Link to a detailed article on seed phrase storage).
+         * External Link Safety Warning: A static, light grey text box warning users before they click any external link: "Warning: You are leaving Quest Hub. Always ensure the URL begins with https://metamask.io."
+4. Key Interactions on Screen 2
+Interaction
+	Expected Response
+	Click an External Link
+	A small, quick Warning Modal appears confirming the user understands they are leaving the site, before the redirect occurs.
+	Click 'Scan Blockchain & Verify Portal'
+	The button enters a loading state $$ Scanning... (3s animation) $$ and then confirms success with a Green Success Toast notification, awarding XP and closing the modal.
+	Verification Failure
+	A clear Red Failure Toast appears (e.g., "Error: Invalid Address Format. Check your input."). AURA offers immediate assistance.

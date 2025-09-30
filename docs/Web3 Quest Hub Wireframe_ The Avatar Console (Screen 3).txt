@@ -1,0 +1,60 @@
+﻿Web3 Quest Hub Wireframe: The Avatar Console (Screen 3)
+The Avatar Console is the user's dedicated profile page, accessed via the "Profile" link in the Header or the "Avatar" icon. It adopts the Clean, Modern Dashboard aesthetic, using data visualization to clearly communicate progress and achievements.
+1. Layout Overview (Two-Column Data Dashboard)
+The screen uses a fixed, two-column grid on desktop, shifting the right column content below the left column on mobile for optimal reading flow.
+A. Left Column: Metrics and Progress Visualization
+* Focuses on quantifiable data, showing how far the user has progressed.
+* Includes charts, dynamic stats, and history.
+B. Right Column: Identity and Achievements
+* Focuses on the user's digital identity, customization, and earned artifacts (badges).
+2. Identity & Status Panel (Top)
+A clean header component confirming the user's standing in the Hub.
+* User Avatar: A prominent circular placeholder for the user's profile image (which may be a connected NFT or a default graphic).
+* Username & Level: @Cypher_Newbie | Explorer Level 3 (Large and centered).
+* Wallet Address: The connected public address, shown clearly with a  
+. This confirms wallet connectivity, which is central to Web3 identity.
+   * Note: A small status tag indicates "Wallet Connected: Mainnet ETH" or "Disconnected".
+3. Left Column Components: The Performance Core
+3.1 XP Core (The Main Progress Visualization)
+   * Aesthetic: A large, central Circular Progress Chart displaying the percentage of XP earned toward the next level (e.g., 65%).
+   * Labels:
+   * Center Text: 65% Complete
+   * Subtitle: 2,150 / 3,300 XP to Level 4
+   * Next Unlock Callout: Next Level Unlocks: Advanced Filters & Profile Tag Customization.
+   * Interaction: Hovering over the chart segments provides tooltips on total XP earned from each Expedition.
+3.2 Mission Completion Rate
+   * Visualization: A simple horizontal Bar Chart or list showing mission completion rates.
+   * Total Missions: 12/28 Completed
+   * Expedition 1 (Digital Frontier): 4/4 Complete (100%)
+   * Expedition 2 (Trading Outpost): 3/4 Complete (75%)
+3.3 The Logbook (Activity Feed)
+   * Aesthetic: A scrollable, time-stamped activity feed, mimicking a clean financial transaction history.
+   * Content: A chronological list of milestones.
+   * Example: [Time Stamp] Mission Complete: Portal Activation (+100 XP, Badge earned).
+   * Example: [Time Stamp] Level Up: Reached Explorer Level 3.
+   * Filter/Search: Option to filter by date or event type (e.g., Badges, Levels, All).
+4. Right Column Components: The Artifact Inventory
+4.1 Artifact Inventory (Badges)
+   * Aesthetic: A responsive grid displaying all earned and potential badges.
+   * Content:
+   * Earned Badges: Displayed in full color (e.g., "Portal Key Holder").
+   * Locked Badges: Displayed as grayscale silhouettes or opaque cards with a clear  
+and the badge name (e.g., "Outpost Trader").
+      * Interaction: Clicking an earned badge brings up a detailed modal showing: Badge Name, Date Earned, Quest Title, and a Share Button to post to social platforms. Clicking a locked badge shows the criteria needed to unlock it.
+4.2 Customization Bay (Future-Proofing)
+      * Aesthetic: A disabled card placeholder that clearly indicates future functionality.
+      * Content:
+      * Title: Customization Bay
+      * Status: "Unlocks at Explorer Level 10."
+      * Placeholder Options: (Disabled buttons/previews for)
+      * Change Profile Tag (e.g., from Cypher_Newbie to a custom title).
+      * Customize Dashboard Color Scheme.
+      * Choose Avatar Frame style.
+4.3 Connected Web3 Assets (NEW)
+      * Aesthetic: A small, informative panel.
+      * Content: Dynamically checks and displays connected on-chain assets relevant to the quests.
+      * ENS Tag: @cyphernewbie.eth (if earned).
+      * NFTs Held: Shows count of specific NFTs earned (e.g., 2 Community Passes).
+      * L2 Commuter Status: Confirms usage of a Layer 2 network (e.g., "Optimism Network Used: Yes").
+This Avatar Console completes the primary views for the Quest Hub website, offering the user a clear, validating, and organized way to track their progress and achievements in the Web3 space!
+With the three main website wireframes complete (Dashboard, Mission Brief, and Avatar Console), is there any other part of the Project Plan you'd like to dive into, such as the technical requirements for the On-Chain Verification Service? 🛠️

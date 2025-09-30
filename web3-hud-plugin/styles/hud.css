@@ -1,0 +1,252 @@
+/* Web3 Quest Hub HUD Styles */
+
+.w3qh-hud-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 999999;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  display: none;
+}
+
+.w3qh-hud-content {
+  display: flex;
+  align-items: center;
+  padding: 12px 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+  min-width: 280px;
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Verified status */
+.w3qh-verified .w3qh-hud-content {
+  background: rgba(16, 185, 129, 0.95);
+  border: 2px solid #10b981;
+}
+
+/* Unverified status */
+.w3qh-unverified .w3qh-hud-content {
+  background: rgba(239, 68, 68, 0.95);
+  border: 2px solid #ef4444;
+}
+
+.w3qh-status-icon {
+  font-size: 24px;
+  margin-right: 12px;
+}
+
+.w3qh-status-text {
+  color: white;
+}
+
+.w3qh-title {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.w3qh-subtitle {
+  font-size: 12px;
+  opacity: 0.9;
+}
+
+/* Completion Toast */
+.w3qh-completion-toast {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999999;
+  animation: toastAppear 0.5s ease-out;
+}
+
+@keyframes toastAppear {
+  0% {
+    transform: translate(-50%, -50%) scale(0.5);
+    opacity: 0;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+}
+
+.w3qh-toast-fade-out {
+  animation: toastFadeOut 0.5s ease-out forwards;
+}
+
+@keyframes toastFadeOut {
+  to {
+    opacity: 0;
+    transform: translate(-50%, -60%) scale(0.9);
+  }
+}
+
+.w3qh-toast-content {
+  display: flex;
+  align-items: center;
+  padding: 24px 32px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  color: white;
+}
+
+.w3qh-toast-icon {
+  font-size: 48px;
+  margin-right: 20px;
+}
+
+.w3qh-toast-title {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.w3qh-toast-subtitle {
+  font-size: 16px;
+  opacity: 0.9;
+}
+
+/* Warning Modal */
+.w3qh-warning-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 99999999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.w3qh-modal-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(4px);
+}
+
+.w3qh-modal-content {
+  position: relative;
+  background: #1f2937;
+  border-radius: 16px;
+  padding: 32px;
+  max-width: 500px;
+  width: 90%;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  animation: modalAppear 0.3s ease-out;
+}
+
+@keyframes modalAppear {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.w3qh-modal-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.w3qh-modal-icon {
+  font-size: 64px;
+  margin-bottom: 12px;
+}
+
+.w3qh-modal-header h2 {
+  color: #f9fafb;
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.w3qh-modal-body {
+  color: #d1d5db;
+  margin-bottom: 24px;
+}
+
+.w3qh-risk-item {
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+
+.w3qh-risk-high {
+  background: rgba(239, 68, 68, 0.2);
+  border-left: 4px solid #ef4444;
+}
+
+.w3qh-risk-medium {
+  background: rgba(251, 191, 36, 0.2);
+  border-left: 4px solid #fbbf24;
+}
+
+.w3qh-risk-low {
+  background: rgba(59, 130, 246, 0.2);
+  border-left: 4px solid #3b82f6;
+}
+
+.w3qh-modal-advice {
+  margin-top: 16px;
+  padding: 12px;
+  background: rgba(59, 130, 246, 0.1);
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.w3qh-modal-footer {
+  display: flex;
+  gap: 12px;
+}
+
+.w3qh-btn {
+  flex: 1;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.w3qh-btn-cancel {
+  background: #374151;
+  color: #f9fafb;
+}
+
+.w3qh-btn-cancel:hover {
+  background: #4b5563;
+}
+
+.w3qh-btn-proceed {
+  background: #ef4444;
+  color: white;
+}
+
+.w3qh-btn-proceed:hover {
+  background: #dc2626;
+}

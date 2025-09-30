@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Web3 Quest Hub HUD</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      width: 320px;
+      min-height: 200px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+      color: #f9fafb;
+      padding: 16px;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 2px solid #374151;
+    }
+
+    .icon {
+      font-size: 32px;
+      margin-right: 12px;
+    }
+
+    .title {
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .subtitle {
+      font-size: 12px;
+      color: #9ca3af;
+    }
+
+    .quest-info {
+      background: rgba(59, 130, 246, 0.1);
+      border: 1px solid #3b82f6;
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 16px;
+    }
+
+    .quest-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .quest-step {
+      font-size: 12px;
+      color: #d1d5db;
+    }
+
+    .no-quest {
+      text-align: center;
+      padding: 24px 12px;
+      color: #9ca3af;
+    }
+
+    .no-quest-icon {
+      font-size: 48px;
+      margin-bottom: 12px;
+      opacity: 0.5;
+    }
+
+    .action-button {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      background: #3b82f6;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      text-align: center;
+    }
+
+    .action-button:hover {
+      background: #2563eb;
+    }
+
+    .status {
+      display: flex;
+      align-items: center;
+      padding: 8px;
+      border-radius: 6px;
+      font-size: 12px;
+      margin-bottom: 16px;
+    }
+
+    .status.connected {
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid #10b981;
+      color: #10b981;
+    }
+
+    .status.disconnected {
+      background: rgba(107, 114, 128, 0.1);
+      border: 1px solid #6b7280;
+      color: #9ca3af;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      margin-right: 8px;
+    }
+
+    .status.connected .status-dot {
+      background: #10b981;
+    }
+
+    .status.disconnected .status-dot {
+      background: #6b7280;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="icon">🤖</div>
+    <div>
+      <div class="title">Web3 Quest Hub</div>
+      <div class="subtitle">HUD Companion</div>
+    </div>
+  </div>
+
+  <div id="status" class="status disconnected">
+    <div class="status-dot"></div>
+    <span>Checking connection...</span>
+  </div>
+
+  <div id="quest-container">
+    <div class="no-quest">
+      <div class="no-quest-icon">🎯</div>
+      <div>No active quest</div>
+      <div style="font-size: 11px; margin-top: 8px;">Start a quest from the dashboard</div>
+    </div>
+  </div>
+
+  <a href="#" id="open-dashboard" class="action-button">Open Quest Dashboard</a>
+
+  <script src="popup.js"></script>
+</body>
+</html>

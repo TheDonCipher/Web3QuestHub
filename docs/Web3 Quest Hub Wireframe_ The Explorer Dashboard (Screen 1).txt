@@ -1,0 +1,72 @@
+﻿Web3 Quest Hub Wireframe: The Explorer Dashboard (Screen 1)
+This wireframe details the initial view of the Web3 Quest Hub, designed as a Clean, Modern Dashboard focusing on content clarity and intuitive navigation, aligning with current web browsing standards. The layout uses flexible card and grid systems for full responsiveness across desktop and mobile.
+🗺️ Layout Overview: The Integrated Dashboard View
+The screen provides a comprehensive, at-a-glance summary of the user's progress and available missions. The layout is clean, high-contrast, and uses abundant whitespace to prevent information overload.
+1. Top: Sticky Header (Persistent Navigation and User Status).
+2. Center Left: Progress Sidebar (User Metrics and Status Bar).
+3. Center Right: The Quest Grid (Card-based Missions and Expeditions).
+4. Bottom Right: AURA Chat Widget (Standard Web Companion).
+1. Sticky Header (Top - Persistent & Standardized)
+* Aesthetic: Clean white or light gray bar (or dark mode equivalent) with subtle separation. Uses standard sans-serif font throughout.
+* Content:
+   *   (Left): A simple, geometric icon next to the text "Quest Hub."
+   * Core Modules (Standard Links): Presented as clear text links (not themed icons) in the center.
+   * Missions (Active) | Profile | Leaderboard | Rewards
+   * User Status & Controls (Right): Standard modern web design elements.
+   *   (Subtle red badge for alerts).
+   *   (Gear).
+   *   (Circular icon, links to Profile/Console).
+      * Responsiveness: On mobile, this header simplifies to Logo, Avatar/Status, and a Hamburger Menu icon that reveals the Core Modules.
+2. Progress Sidebar (Center Left - User Metrics)
+This fixed-width sidebar (collapsing into a dedicated section on mobile) provides continuous validation of user progress, keeping motivation high without overly gamified jargon.
+      * Aesthetic: Clean card with slightly rounded corners and a soft drop shadow, common in dashboard design.
+      * Content:
+      * User Identity: Hello, @Cypher_Newbie | Explorer Level 3 (Simple title, not Initiate/Pilot).
+      * Overall Progress Bar: A smooth, linear progress bar displaying [XP / XP to Next Level].
+      * Function: Uses a clean color gradient (e.g., light blue to dark blue) and updates instantly upon completion.
+      * Next Milestone: A small, prioritized card showing the immediate goal.
+      * Title: Next Unlock: Level 4
+      * Reward Preview: "Unlocks Trading Outpost Missions and Custom Avatar."
+      * Quick Links: A simple, high-utility set of links.
+      * Active Quest: Portal Activation (Clickable, opens Mission Brief).
+      * View Logbook (Full history of completed tasks).
+      * Security Health Check (Link to wallet best practices guide).
+3. The Quest Grid (Center Right - Core Content Area)
+This is the main, scrollable content area, presented as a responsive card grid, offering clear visual separation for the different learning paths.
+A. Expedition Sections (Thematic Categories)
+      * Representation: Missions are grouped under clear, clean section headers (H2 level).
+      * Structure: Missions are displayed in card rows or grid view under their respective Expedition header.
+      * Header 1: Expedition 1: Digital Frontier (Identity & Security)
+      * Header 2: Expedition 2: Trading Outpost (Commerce & DeFi)
+      * Header 3: Expedition 3: Artifact Quarter (Culture & Ownership)
+      * Locked Content: Locked Expeditions are represented by a translucent, disabled card showing the required Level with a clear lock icon. Example: "Required Level 10 to Access."
+B. Mission Cards (Quests)
+      * Aesthetic: Individual missions are presented as uniform, hoverable cards (clean white/light gray background) within the grid.
+      * Content Elements:
+      * Icon: A small, relevant icon (e.g., a shield for 'Portal Activation').
+      * Title & Platform: "Portal Activation" | MetaMask
+      * Reward Summary: +100 XP | Badge: Portal Key Holder (small icons).
+      * Status Tag: A color-coded tag in the top right.
+      * In Progress: Blue pill-shaped tag.
+      * Completed: Green checkmark tag.
+      * New: Simple gray tag.
+      * Interaction: Clicking the card opens the Mission Brief Modal (Screen 2). Hovering over the card produces a subtle, non-distracting lift effect (soft shadow increase).
+C. Filtering Module (Comms Channels)
+      * Aesthetic: Standard button-group filters placed directly above the Quest Grid, typically aligned right.
+      * Content: Standard buttons (not stylized comms channels).
+      * All Missions | In Progress | Completed | Recommended
+      * Function: Clicking a button instantly filters the card grid using a smooth, standard transition (e.g., a fade-in/out).
+3. AURA Chat Widget (Bottom Right - Standard Web Companion)
+AURA is redesigned to look like a standard, familiar support chat bubble, providing contextual help without interfering with the main dashboard.
+      * Aesthetic: A circular, floating chat bubble fixed to the bottom-right corner of the screen. Uses the primary blue accent color.
+      * Minimized State: The bubble displays the  
+(clean, simple geometric design) and often includes a short, automated greeting (e.g., "Need Help?").
+      * Expanded State (Chat Modal): Opens a standard chat modal overlaying the lower corner of the screen.
+         * Header: "AURA Assistant" with a minimize/close button.
+         * Function: Provides contextual, text-based support.
+         * Dynamic Prompts: Still includes dynamically changing quick prompts based on the user's active quest, presented as clickable buttons within the chat window (e.g., \[Explain Gas Fees\]). This reinforces the helper function within a familiar UI.
+4. Key UX Principles (Modern Web Focus)
+         1. Clarity Over Theme: Content takes priority. Use standard icons and clear labels.
+         2. Modal Strategy: All secondary information (Mission Brief, Settings, Notifications) is contained in responsive modals to keep the user anchored to the main dashboard.
+         3. Performance: Utilize lazy loading for quest cards and smooth CSS transitions (opacity, translation) to ensure a fast, non-lagging experience typical of high-performance web applications.
+         4. Standard Interaction: All links, buttons, and hover states follow expected web behavior (underlines, button highlights, shadow changes).

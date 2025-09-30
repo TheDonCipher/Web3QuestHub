@@ -1,0 +1,12 @@
+{
+  "name": "web3-quest-hub",
+  "version": "1.0.0",
+  "description": "Web3 Quest Hub - A gamified educational platform for Web3 onboarding",
+  "scripts": {
+    "import-linear": "node import-to-linear.js"
+  },
+  "devDependencies": {
+    "@linear/sdk": "^12.0.0",
+    "dotenv": "^16.6.1"
+  }
+}

@@ -1,0 +1,38 @@
+# Auto-labeling configuration for PRs
+
+'frontend':
+  - 'web3-quest-hub-app/**/*'
+  - '!web3-quest-hub-app/lib/firebase/**/*'
+
+'backend':
+  - 'firebase-functions/**/*'
+  - 'firestore.rules'
+  - 'firestore.indexes.json'
+
+'extension':
+  - 'web3-hud-plugin/**/*'
+
+'documentation':
+  - '*.md'
+  - 'docs/**/*'
+
+'dependencies':
+  - '**/package.json'
+  - '**/package-lock.json'
+
+'firebase':
+  - 'firebase.json'
+  - 'firestore.rules'
+  - 'firestore.indexes.json'
+  - 'firebase-functions/**/*'
+
+'ui/ux':
+  - 'web3-quest-hub-app/components/**/*'
+  - 'web3-quest-hub-app/app/**/*.tsx'
+  - '**/*.css'
+
+'configuration':
+  - '*.config.js'
+  - '*.config.ts'
+  - '.github/**/*'
+  - 'tsconfig.json'

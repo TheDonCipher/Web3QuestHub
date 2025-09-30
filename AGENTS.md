@@ -66,6 +66,62 @@ Each task is considered complete only when ALL criteria are met:
 - Keep previous implementation available during migration
 - Document rollback procedures in commit messages
 
+### 2.6 GitHub and Linear Integration
+
+#### Using GitHub with Linear
+
+When working with Linear issues, always reference them in your commits and PRs:
+
+**In Commit Messages:**
+```bash
+# Standard commit with Linear reference
+git commit -m "feat: add quest grid component (WEB-15)
+
+Implemented responsive quest grid with expedition grouping.
+Added filtering and sorting functionality.
+
+Co-authored-by: factory-droid[bot] <138933559+factory-droid[bot]@users.noreply.github.com>"
+
+# Fix commit with Linear reference
+git commit -m "fix: correct XP calculation overflow (WEB-23)
+
+Fixed integer overflow in XP calculation for high-level users.
+Added boundary checks and tests.
+
+Fixes WEB-23"
+```
+
+**In Pull Request Descriptions:**
+```markdown
+## Description
+Implements the quest grid component with expedition grouping.
+
+## Changes
+- Added QuestGrid component with responsive layout
+- Implemented expedition-based grouping
+- Added filtering by difficulty
+
+## Testing
+- [x] Verified grid displays correctly on desktop
+- [x] Verified responsive layout on mobile
+- [x] Tested filtering functionality
+
+## Linear Issue
+Closes WEB-15
+```
+
+**Benefits of Integration:**
+- ✅ Commits automatically link to Linear issues
+- ✅ Issues auto-close when PR merges with "Closes WEB-X"
+- ✅ Full traceability from issue → commit → PR → deployment
+- ✅ Team visibility into progress
+
+**Linear Keywords:**
+- `Closes WEB-X` - Closes the issue when PR merges
+- `Fixes WEB-X` - Same as Closes
+- `Resolves WEB-X` - Same as Closes
+- `WEB-X` - Links to issue without closing
+
 ---
 
 ## 3. Testing Strategy
@@ -307,19 +363,317 @@ export const calculateLevel = (totalXP: number): number => {
 
 ---
 
-## 12. Workflow Summary
+## 12. Daily Workflow Guide
 
-### For Each Task:
-1. **Read and understand** existing code and specifications
-2. **Plan the implementation** - document approach
-3. **Confirm with stakeholder** if complex or unclear
-4. **Implement incrementally** - small, testable changes
-5. **Test thoroughly** - unit, integration, manual
-6. **Document changes** - code comments and commit message
-7. **Review security** - check for vulnerabilities
-8. **Verify performance** - profile if critical path
-9. **Commit with proper message** - use Conventional Commits
-10. **Update task tracker** - mark as complete when DoD met
+This section provides step-by-step workflows for common development tasks.
+
+### 12.1 Starting Work on a New Task
+
+**Step 1: Select Task in Linear**
+```bash
+# 1. Open Linear (linear.app)
+# 2. Go to "My Issues" or current Sprint
+# 3. Select a task to work on (e.g., WEB-15)
+# 4. Click the task to open details
+# 5. Review acceptance criteria and description
+# 6. Move status to "In Progress"
+```
+
+**Step 2: Create Feature Branch**
+```bash
+# Update main branch first
+git checkout main
+git pull origin main
+
+# Create feature branch with descriptive name
+git checkout -b feature/WEB-15-quest-grid
+
+# Branch naming convention:
+# feature/WEB-X-short-description  (for features)
+# fix/WEB-X-short-description      (for bugs)
+# refactor/WEB-X-short-description (for refactoring)
+```
+
+**Step 3: Implement Changes**
+```bash
+# Make your code changes
+# Follow AGENTS.md guidelines
+# Add tests as you go
+# Document your code (WHAT, HOW, WHY)
+
+# Check your work frequently
+npm run type-check  # TypeScript validation
+npm run lint        # ESLint check
+npm run test        # Run tests (if configured)
+```
+
+**Step 4: Commit Your Changes**
+```bash
+# Stage your changes
+git add .
+
+# Check what you're committing
+git status
+git diff --staged
+
+# Commit with Conventional Commits format
+git commit -m "feat: add quest grid component (WEB-15)
+
+Implemented responsive quest grid with expedition grouping.
+Added filtering by difficulty and status.
+Created QuestCard subcomponent for individual quest display.
+
+Technical details:
+- Used CSS Grid for responsive layout
+- Implemented expedition-based grouping logic
+- Added loading states and error handling
+
+Testing:
+- Added unit tests for filtering logic
+- Verified responsive design on mobile/tablet/desktop
+- Tested with empty state and error scenarios
+
+Co-authored-by: factory-droid[bot] <138933559+factory-droid[bot]@users.noreply.github.com>"
+```
+
+**Step 5: Push to GitHub**
+```bash
+# Push your feature branch
+git push -u origin feature/WEB-15-quest-grid
+
+# If you need to push again after more commits:
+git push
+```
+
+**Step 6: Create Pull Request**
+
+**Option A: Via GitHub CLI (Recommended)**
+```bash
+gh pr create \
+  --title "feat: Quest Grid Component (WEB-15)" \
+  --body "## Description
+Implements the quest grid component with expedition grouping.
+
+## Changes
+- Added QuestGrid component with responsive layout
+- Implemented expedition-based grouping
+- Added filtering by difficulty and status
+- Created QuestCard subcomponent
+
+## Testing
+- [x] Unit tests passing
+- [x] Type checking passing
+- [x] Responsive design verified
+- [x] Manual testing on all screen sizes
+
+## Screenshots
+[Add screenshots if UI changes]
+
+## Linear Issue
+Closes WEB-15"
+```
+
+**Option B: Via GitHub Web UI**
+1. Go to your repository on GitHub
+2. Click "Pull requests" tab
+3. Click "New pull request"
+4. Select your branch
+5. Fill in the template (similar to above)
+6. Click "Create pull request"
+
+### 12.2 During Code Review
+
+**Responding to Feedback**
+```bash
+# Make requested changes
+# Edit the files based on review comments
+
+# Stage and commit the changes
+git add .
+git commit -m "refactor: address PR feedback (WEB-15)
+
+- Extract filtering logic into separate function
+- Add JSDoc comments to exported functions
+- Simplify conditional rendering logic"
+
+# Push the new commit
+git push
+
+# The PR will automatically update
+```
+
+**Requesting Changes**
+```bash
+# If you need clarification on review comments:
+# - Reply to the specific comment in GitHub
+# - Ask for clarification before implementing
+# - Tag the reviewer with @username
+```
+
+### 12.3 Merging Your Pull Request
+
+**Before Merging Checklist**
+- [ ] All review comments addressed
+- [ ] All CI checks passing (if configured)
+- [ ] At least 1 approval received
+- [ ] Branch is up to date with main
+- [ ] No merge conflicts
+
+**Merge via GitHub CLI**
+```bash
+# Squash and merge (recommended for clean history)
+gh pr merge --squash --delete-branch
+
+# Or merge commit (preserves all commits)
+gh pr merge --merge --delete-branch
+
+# Or rebase (linear history)
+gh pr merge --rebase --delete-branch
+```
+
+**Merge via GitHub UI**
+1. Go to your PR on GitHub
+2. Click "Squash and merge" (recommended)
+3. Edit commit message if needed
+4. Click "Confirm squash and merge"
+5. Delete branch when prompted
+
+**After Merge**
+```bash
+# Switch back to main and update
+git checkout main
+git pull origin main
+
+# Your feature branch is automatically deleted on GitHub
+# Delete it locally too
+git branch -d feature/WEB-15-quest-grid
+
+# Linear issue WEB-15 will auto-close due to "Closes WEB-15" in PR
+```
+
+### 12.4 Working on Multiple Tasks
+
+**Switching Between Tasks**
+```bash
+# Save current work (if not ready to commit)
+git stash save "WIP: quest grid component"
+
+# Switch to other branch
+git checkout feature/WEB-23-xp-calculator
+
+# Work on the other task...
+
+# Switch back
+git checkout feature/WEB-15-quest-grid
+
+# Restore your work
+git stash pop
+```
+
+**Managing Multiple Branches**
+```bash
+# List all branches
+git branch -a
+
+# Delete merged branches
+git branch -d feature/WEB-12-completed-task
+
+# Force delete if not merged (be careful!)
+git branch -D feature/WEB-14-abandoned-feature
+```
+
+### 12.5 Handling Merge Conflicts
+
+**When Conflicts Occur**
+```bash
+# Update your branch with latest main
+git checkout feature/WEB-15-quest-grid
+git fetch origin main
+git rebase origin/main
+
+# If conflicts appear:
+# 1. Git will tell you which files have conflicts
+# 2. Open each file and look for conflict markers:
+#    <<<<<<< HEAD
+#    Your changes
+#    =======
+#    Changes from main
+#    >>>>>>> origin/main
+
+# 3. Edit the file to resolve conflicts
+# 4. Remove conflict markers
+# 5. Keep the correct code
+
+# After resolving all conflicts:
+git add .
+git rebase --continue
+
+# Push the updated branch (force push required after rebase)
+git push --force-with-lease
+```
+
+### 12.6 Quick Task Updates
+
+**For Simple Changes (typo, comment, small fix)**
+```bash
+# Make the change
+# Commit directly to feature branch
+git add .
+git commit -m "docs: fix typo in component comment (WEB-15)"
+git push
+
+# No need for new PR, just push to existing branch
+```
+
+**For Urgent Hotfixes**
+```bash
+# Create hotfix branch from main
+git checkout main
+git pull origin main
+git checkout -b hotfix/WEB-99-critical-bug
+
+# Make the fix
+# Commit and push
+git add .
+git commit -m "fix: resolve critical authentication bug (WEB-99)
+
+Users were unable to login due to incorrect token validation.
+
+Fixes WEB-99"
+git push -u origin hotfix/WEB-99-critical-bug
+
+# Create PR immediately
+gh pr create --title "HOTFIX: Critical Auth Bug (WEB-99)" --body "Critical fix for production. Closes WEB-99"
+
+# Request immediate review
+# Merge ASAP after approval
+```
+
+### 12.7 Task Workflow Summary
+
+**Quick Reference:**
+```bash
+# 1. Start task
+git checkout main && git pull
+git checkout -b feature/WEB-X-description
+# (Move Linear issue to "In Progress")
+
+# 2. Work and commit
+# ... make changes ...
+git add . && git commit -m "type: description (WEB-X)"
+git push -u origin feature/WEB-X-description
+
+# 3. Create PR
+gh pr create --title "type: Title (WEB-X)" --body "Closes WEB-X"
+
+# 4. After review and approval
+gh pr merge --squash --delete-branch
+
+# 5. Clean up
+git checkout main && git pull
+git branch -d feature/WEB-X-description
+# (Linear issue auto-closes)
+```
 
 ### For Each Phase:
 1. **Analysis**: Read specifications and existing code
@@ -335,7 +689,89 @@ export const calculateLevel = (totalXP: number): number => {
 
 ---
 
-## 13. Tools and Commands
+## 13. CI/CD Integration
+
+### 13.1 Automated Testing Pipeline
+
+The project uses GitHub Actions for automated testing and deployment. Every push and PR triggers:
+
+**Automated Checks:**
+- ✅ TypeScript type checking
+- ✅ ESLint code quality
+- ✅ Build verification
+- ✅ Security audits
+- ✅ Dependency review
+- ✅ Performance testing (Lighthouse)
+
+**Status Checks Required Before Merge:**
+- Test Next.js App
+- Test Firebase Functions
+- Lint Extension
+- Security Audit
+
+### 13.2 CI/CD Workflows
+
+| Workflow | Trigger | Purpose |
+|----------|---------|---------|
+| **CI Pipeline** | Push, PR | Runs all tests and builds |
+| **Deploy Preview** | PR to main | Deploys preview to Vercel |
+| **CodeQL** | Push, PR, Schedule | Security scanning |
+| **Lighthouse** | PR (app changes) | Performance testing |
+| **Firebase Deploy** | Push to main | Deploys functions and rules |
+| **Release** | Tag push (v*) | Creates release with artifacts |
+
+### 13.3 Local Testing Before Push
+
+**Always run these checks locally before pushing:**
+
+```bash
+# In Next.js app
+cd web3-quest-hub-app
+npm run type-check  # Must pass ✅
+npm run lint        # Must pass ✅
+npm run build       # Must succeed ✅
+
+# In Firebase Functions
+cd ../firebase-functions
+npm run build       # Must succeed ✅
+```
+
+### 13.4 Checking CI Status
+
+**View CI Status:**
+1. Push your branch to GitHub
+2. Go to Actions tab in repository
+3. Find your workflow run
+4. View detailed logs if failed
+
+**PR Status Checks:**
+- All required checks must be green ✅ before merge
+- Fix failures immediately
+- Don't force merge failing checks
+
+### 13.5 CI/CD Secrets Management
+
+**Never commit secrets!** All API keys are stored in GitHub Secrets.
+
+**Required Secrets:**
+- Firebase tokens and project ID
+- Gemini API key
+- Alchemy API key
+- Vercel tokens (for preview deployments)
+
+See [CI_CD_SETUP.md](CI_CD_SETUP.md) for complete setup instructions.
+
+### 13.6 Preview Deployments
+
+**Automatic Preview URLs:**
+- Every PR to main gets a Vercel preview deployment
+- Preview URL posted as PR comment
+- Test your changes in production-like environment
+- Share preview URL with reviewers
+
+---
+
+## 14. Tools and Commands
 
 ### Development
 ```bash

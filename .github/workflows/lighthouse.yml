@@ -1,0 +1,76 @@
+name: Lighthouse Performance
+
+on:
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'web3-quest-hub-app/**'
+  workflow_dispatch:
+
+jobs:
+  lighthouse:
+    name: Run Lighthouse
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        cache: 'npm'
+        cache-dependency-path: web3-quest-hub-app/package-lock.json
+    
+    - name: Install dependencies
+      run: |
+        cd web3-quest-hub-app
+        npm ci
+    
+    - name: Build application
+      run: |
+        cd web3-quest-hub-app
+        npm run build
+      env:
+        NEXT_PUBLIC_FIREBASE_API_KEY: test-key
+        NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: test.firebaseapp.com
+        NEXT_PUBLIC_FIREBASE_PROJECT_ID: test-project
+        NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET: test.appspot.com
+        NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: '123456789'
+        NEXT_PUBLIC_FIREBASE_APP_ID: '1:123456789:web:abc123'
+    
+    - name: Run Lighthouse CI
+      uses: treosh/lighthouse-ci-action@v10
+      with:
+        urls: |
+          http://localhost:3000
+        configPath: './lighthouserc.json'
+        uploadArtifacts: true
+        temporaryPublicStorage: true
+        runs: 3
+    
+    - name: Comment PR with results
+      uses: actions/github-script@v7
+      if: github.event_name == 'pull_request'
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          const comment = `## 🔦 Lighthouse Performance Report
+          
+          Performance metrics are available in the workflow artifacts.
+          
+          **Thresholds:**
+          - Performance: > 90
+          - Accessibility: > 90
+          - Best Practices: > 90
+          - SEO: > 90
+          
+          View detailed results in the [workflow run](${context.payload.repository.html_url}/actions/runs/${context.runId}).`;
+          
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: comment
+          });

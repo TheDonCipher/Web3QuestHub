@@ -86,6 +86,8 @@ Web3QuestHub/
 - A Firebase project
 - Google Gemini API key
 - Alchemy or Infura API key
+- GitHub account (for CI/CD)
+- Linear account (for project management)
 
 ### Installation
 
@@ -236,6 +238,23 @@ The project is organized into 7 development phases (see `TASKLIST.md` for detail
 5. **Phase 5**: On-Chain Verification Service
 6. **Phase 6**: Browser Plugin Development
 7. **Phase 7**: System Integration & Testing
+
+## 🔄 CI/CD Pipeline
+
+Automated testing and deployment with GitHub Actions:
+
+- ✅ **Continuous Integration**: Runs on every push and PR
+  - Type checking, linting, and builds
+  - Security audits and dependency reviews
+  - Browser extension validation
+
+- 🚀 **Preview Deployments**: Automatic Vercel previews for PRs
+- 🔐 **Security Scanning**: CodeQL and dependency analysis
+- 📊 **Performance Testing**: Lighthouse CI with thresholds
+- 🏗️ **Firebase Deployment**: Automated function and rules deployment
+- 📦 **Release Automation**: Package and publish on version tags
+
+**See [CI_CD_SETUP.md](CI_CD_SETUP.md) for complete configuration details.**
 
 ## 🧪 Testing
 

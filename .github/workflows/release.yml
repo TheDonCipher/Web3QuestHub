@@ -1,0 +1,98 @@
+name: Create Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  create-release:
+    name: Create GitHub Release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+    
+    - name: Build Next.js App
+      run: |
+        cd web3-quest-hub-app
+        npm ci
+        npm run build
+      env:
+        NEXT_PUBLIC_FIREBASE_API_KEY: ${{ secrets.NEXT_PUBLIC_FIREBASE_API_KEY }}
+        NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: ${{ secrets.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN }}
+        NEXT_PUBLIC_FIREBASE_PROJECT_ID: ${{ secrets.NEXT_PUBLIC_FIREBASE_PROJECT_ID }}
+        NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET: ${{ secrets.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET }}
+        NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID }}
+        NEXT_PUBLIC_FIREBASE_APP_ID: ${{ secrets.NEXT_PUBLIC_FIREBASE_APP_ID }}
+    
+    - name: Build Firebase Functions
+      run: |
+        cd firebase-functions
+        npm ci
+        npm run build
+    
+    - name: Package Browser Extension
+      run: |
+        cd web3-hud-plugin
+        zip -r ../web3-hud-plugin-${{ github.ref_name }}.zip . -x "*.git*" "node_modules/*"
+    
+    - name: Generate Changelog
+      id: changelog
+      run: |
+        # Get previous tag
+        PREV_TAG=$(git describe --tags --abbrev=0 $(git rev-list --tags --skip=1 --max-count=1) 2>/dev/null || echo "")
+        
+        if [ -z "$PREV_TAG" ]; then
+          CHANGELOG="Initial release"
+        else
+          CHANGELOG=$(git log ${PREV_TAG}..HEAD --pretty=format:"- %s (%h)" --no-merges)
+        fi
+        
+        echo "changelog<<EOF" >> $GITHUB_OUTPUT
+        echo "$CHANGELOG" >> $GITHUB_OUTPUT
+        echo "EOF" >> $GITHUB_OUTPUT
+    
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      with:
+        name: Release ${{ github.ref_name }}
+        body: |
+          ## Web3 Quest Hub ${{ github.ref_name }}
+          
+          ### What's Changed
+          ${{ steps.changelog.outputs.changelog }}
+          
+          ### Installation
+          
+          **Next.js Application:**
+          1. Download source code
+          2. Follow instructions in GETTING_STARTED.md
+          
+          **Browser Extension:**
+          1. Download `web3-hud-plugin-${{ github.ref_name }}.zip`
+          2. Extract the zip file
+          3. Load unpacked extension in Chrome
+          
+          ### Documentation
+          - [Implementation Plan](IMPLEMENTATION_PLAN.md)
+          - [Getting Started Guide](GETTING_STARTED.md)
+          - [Development Guidelines](AGENTS.md)
+          
+          **Full Changelog**: https://github.com/${{ github.repository }}/compare/${{ steps.changelog.outputs.prev_tag }}...${{ github.ref_name }}
+        files: |
+          web3-hud-plugin-${{ github.ref_name }}.zip
+        draft: false
+        prerelease: ${{ contains(github.ref_name, 'alpha') || contains(github.ref_name, 'beta') || contains(github.ref_name, 'rc') }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

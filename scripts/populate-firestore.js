@@ -20,23 +20,66 @@ admin.initializeApp({
 const db = admin.firestore();
 
 /**
- * Parse JSON with comments (strips // comments)
+ * Parse JSON with comments (strips // comments and extracts collection objects)
  */
 function parseJsonWithComments(jsonString) {
   // Remove single-line comments
   const withoutComments = jsonString.replace(/\/\/.*$/gm, '');
-  // Parse multiple JSON objects separated by blank lines
-  const jsonObjects = withoutComments.split(/\n\n+/).filter(line => line.trim());
   
+  // Extract all JSON objects (everything between { and })
   const collections = {};
+  let braceDepth = 0;
+  let currentJson = '';
+  let inString = false;
+  let escapeNext = false;
   
-  for (const jsonObj of jsonObjects) {
-    try {
-      const parsed = JSON.parse(jsonObj);
-      Object.assign(collections, parsed);
-    } catch (e) {
-      // Skip invalid JSON blocks
-      console.warn('Skipping invalid JSON block');
+  for (let i = 0; i < withoutComments.length; i++) {
+    const char = withoutComments[i];
+    
+    // Handle string literals (to avoid counting braces inside strings)
+    if (escapeNext) {
+      escapeNext = false;
+      if (braceDepth > 0) currentJson += char;
+      continue;
+    }
+    
+    if (char === '\\') {
+      escapeNext = true;
+      if (braceDepth > 0) currentJson += char;
+      continue;
+    }
+    
+    if (char === '"' && !escapeNext) {
+      inString = !inString;
+      if (braceDepth > 0) currentJson += char;
+      continue;
+    }
+    
+    // Count braces only outside strings
+    if (!inString) {
+      if (char === '{') {
+        braceDepth++;
+        currentJson += char;
+      } else if (char === '}') {
+        currentJson += char;
+        braceDepth--;
+        
+        // When we close the top-level object, try to parse it
+        if (braceDepth === 0 && currentJson.trim()) {
+          try {
+            const parsed = JSON.parse(currentJson);
+            Object.assign(collections, parsed);
+            currentJson = '';
+          } catch (e) {
+            console.warn('Skipping invalid JSON block:', e.message.substring(0, 100));
+            currentJson = '';
+          }
+        }
+      } else if (braceDepth > 0) {
+        currentJson += char;
+      }
+    } else if (braceDepth > 0) {
+      currentJson += char;
     }
   }
   
@@ -54,11 +97,14 @@ async function uploadCollection(collectionName, documents, idField = 'userId') {
   
   for (const doc of documents) {
     // Use the specified ID field as document ID
-    const docId = doc[idField];
-    if (!docId) {
+    let docId = doc[idField];
+    if (!docId && docId !== 0) {
       console.warn(`⚠️  Skipping document without ${idField}:`, doc);
       continue;
     }
+    
+    // Convert numeric IDs to strings (Firestore requires string IDs)
+    docId = String(docId);
     
     const docRef = db.collection(collectionName).doc(docId);
     batch.set(docRef, doc);

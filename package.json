@@ -8,5 +8,15 @@
   "devDependencies": {
     "@linear/sdk": "^12.0.0",
     "dotenv": "^16.6.1"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5.90.2",
+    "clsx": "^2.1.1",
+    "ethers": "^6.15.0",
+    "firebase": "^12.3.0",
+    "lucide-react": "^0.544.0",
+    "tailwind-merge": "^3.3.1",
+    "viem": "^2.37.9",
+    "wagmi": "^2.17.5"
   }
 }

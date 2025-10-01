@@ -12,35 +12,33 @@ service cloud.firestore {
       return isSignedIn() && request.auth.uid == userId;
     }
 
-    // USER PROFILE: Users can read and write their own profile data only
+    // USER PROFILE: Allow read/write for MVP (wallet-based auth)
     match /user_profile/{userId} {
-      allow read, update: if isOwner(userId);
-      allow create: if isSignedIn();
+      allow read: if true;
+      allow create, update: if true; // MVP: Open for testing
     }
 
-    // MISSION CATALOG: Read-only for all authenticated users (public quest data)
+    // MISSION CATALOG: Read-only for all users (public quest data)
     match /mission_catalog/{missionId} {
-      allow read: if isSignedIn();
+      allow read: if true; // MVP: Public read
       allow write: if false; // No client-side writes
     }
 
-    // EXPEDITION CATALOG: Read-only for all authenticated users (quest groups)
+    // EXPEDITION CATALOG: Read-only for all users (quest groups)
     match /expedition_catalog/{expeditionId} {
-      allow read: if isSignedIn();
+      allow read: if true; // MVP: Public read
       allow write: if false; // No client-side writes
     }
 
-    // BADGE CATALOG: Read-only for all authenticated users (available badges)
+    // BADGE CATALOG: Read-only for all users (available badges)
     match /badge_catalog/{badgeId} {
-      allow read: if isSignedIn();
+      allow read: if true; // MVP: Public read
       allow write: if false; // No client-side writes
     }
 
-    // MISSION STATUS: Users can read and update their own mission progress
-    // Document ID format: {userId}_{missionId}
+    // MISSION STATUS: Open for MVP testing
     match /mission_status/{statusId} {
-      allow read: if isSignedIn() && statusId.matches('^' + request.auth.uid + '_.*');
-      allow create, update: if isSignedIn() && statusId.matches('^' + request.auth.uid + '_.*');
+      allow read, create, update: if true; // MVP: Open for testing
       allow delete: if false; // Never allow deletion
     }
 
@@ -56,9 +54,9 @@ service cloud.firestore {
       allow read, write: if isOwner(userId);
     }
 
-    // LEVEL PROGRESSION TABLE: Read-only for all authenticated users
+    // LEVEL PROGRESSION TABLE: Read-only for all users
     match /level_progression_table/{level} {
-      allow read: if isSignedIn();
+      allow read: if true; // MVP: Public read
       allow write: if false; // No client-side writes
     }
 

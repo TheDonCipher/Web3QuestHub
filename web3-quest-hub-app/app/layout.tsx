@@ -1,7 +1,7 @@
 import './globals.css';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
-import { AuthProvider } from '@/lib/contexts/AuthContext';
+import { WagmiProvider } from '@/components/providers/WagmiProvider';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 
@@ -16,11 +16,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" data-theme="dark">
       <body className={`${inter.variable} font-sans antialiased`}>
-        <AuthProvider>
+        <WagmiProvider>
           {children}
-        </AuthProvider>
+        </WagmiProvider>
       </body>
     </html>
   );

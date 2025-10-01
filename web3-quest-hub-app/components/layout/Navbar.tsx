@@ -30,7 +30,7 @@ export default function Navbar() {
   const profileAvatar = `https://api.dicebear.com/7.x/bottts/svg?seed=${address || 'default'}`;
 
   const navLinks = [
-    { href: '/', label: 'Home' },
+    { href: '/dashboard', label: 'Home' },
     { href: '/quests', label: 'Quests' },
     { href: '/learn', label: 'Learn' },
     { href: '/marketplace', label: 'Marketplace' },
@@ -38,8 +38,8 @@ export default function Navbar() {
   ];
 
   const isActive = (href: string) => {
-    if (href === '/') {
-      return pathname === '/';
+    if (href === '/dashboard') {
+      return pathname === '/dashboard';
     }
     return pathname?.startsWith(href);
   };
@@ -52,7 +52,7 @@ export default function Navbar() {
             <path clipRule="evenodd" d="M24 4H6V17.3333V30.6667H24V44H42V30.6667V17.3333H24V4Z" fill="currentColor" fillRule="evenodd"></path>
           </svg>
         </div>
-        <Link href="/">
+        <Link href="/dashboard">
           <h2 className="text-xl font-bold text-theme-primary hover:text-[var(--primary)] transition-colors">
             Web3 Quest Hub
           </h2>
